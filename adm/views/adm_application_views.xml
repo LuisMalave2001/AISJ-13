@@ -145,7 +145,7 @@
                             <group>
                                 <field name="doctor_name"/>
                                 <field name="hospital"/>
-                                <field name="doctor_name"/>
+                                <field name="doctor_address"/>
                                 <field name="blood_type"/>
                             </group>
                             <notebook id="application_health">
