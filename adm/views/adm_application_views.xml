@@ -146,6 +146,7 @@
                                 <field name="doctor_name"/>
                                 <field name="hospital"/>
                                 <field name="doctor_name"/>
+                                <field name="blood_type"/>
                             </group>
                             <notebook id="application_health">
                                 <page name="conditions" string="Conditions">
