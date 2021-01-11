@@ -10,4 +10,24 @@
             </field>
         </field>
     </record>
+
+    <record id="formio_form_view_tree_inherit" model="ir.ui.view">
+        <field name="name">formio.form.view.tree.inherit</field>
+        <field name="model">formio.form</field>
+        <field name="inherit_id" ref="formio.view_formio_form_tree"/>
+        <field name="arch" type="xml">
+            <field name="res_model_name" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </field>
+            <field name="res_name" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </field>
+            <field name="res_partner_id" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </field>
+            <field name="public_create" position="after">
+                <field name="reference"/>
+            </field>
+        </field>
+    </record>
 </odoo>

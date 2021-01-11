@@ -5,6 +5,14 @@
         <field name="model">adm.application</field>
         <field name="inherit_id" ref="adm.adm_application_view_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='image']" position="before">
+                <div name="button_box" class="oe_button_box">
+                    <button name="action_open_forms" class="oe_stat_button" icon="fa-file" type="object"
+                        context="{'default_reference': 'adm.application,' + str(active_id)}">
+                        <field string="Forms" name="form_count" widget="statinfo"/>
+                    </button>
+                </div>
+            </xpath>
             <field name="previous_school_ids" position="before">
                 <group>
                     <field name="formio_reference_form_id"/>

@@ -23,6 +23,7 @@
 
     'data': [
         'views/adm_application_views.xml',
+        'views/adm_inquiry_views.xml',
         'views/adm_application_templates.xml',
 
         'data/mail_template_data.xml',

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="formio_form_report_view_tree" model="ir.ui.view">
+        <field name="name">formio.form.report.view.tree</field>
+        <field name="model">formio.form.report</field>
+        <field name="arch" type="xml">
+            <tree string="Formio Form Reports">
+                <field name="form_id"/>
+                <field name="name"/>
+                <field name="label"/>
+                <field name="value"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="formio_form_report_view_search" model="ir.ui.view">
+        <field name="name">formio.form.report.view.search</field>
+        <field name="model">formio.form.report</field>
+        <field name="arch" type="xml">
+            <search string="Formio Form Report Search">
+                <field name="name"/>
+                <field name="label"/>
+                <field name="form_id"/>
+                <field name="builder_id"/>
+                <group expand="1" string="Group By">
+                    <filter string="Field Name" name="groupby_name" context="{'group_by': 'name'}"/>
+                    <filter string="Field Label" name="groupby_label" context="{'group_by': 'label'}"/>
+                    <filter string="Value" name="groupby_value" context="{'group_by': 'value'}"/>
+                    <filter string="Form" name="groupby_form_id" context="{'group_by': 'form_id'}"/>
+                    <filter string="Form Builder" name="groupby_builder_id" context="{'group_by': 'builder_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="formio_form_report_action" model="ir.actions.act_window">
+        <field name="name">Form Report</field>
+        <field name="res_model">formio.form.report</field>
+        <field name="view_mode">graph,pivot,tree</field>
+        <field name="domain">[]</field>
+        <field name="context">{
+            'create': 0,
+            'edit': 0,
+            'delete': 0,
+            'search_default_groupby_label': 1,
+            'search_default_groupby_value': 1,
+        }</field>
+    </record>
+
+    <menuitem
+        id="formio_form_report_menu"
+        name="Reporting"
+        action="formio_form_report_action"
+        parent="formio.menu_formio_root"
+        sequence="80"/>
+</odoo>

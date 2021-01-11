@@ -286,7 +286,7 @@
                                        t-att-value="application_id.c_aisj_parent_questionaire_q1"/>
                             </div>
                             <div class="col-12 col-md-6 form-group">
-                                <label>In What activities outside of school is your child involved?</label>
+                                <label>What extracurricular activities does your child participate in?</label>
                                 <input class="form-control" type="text"
                                        data-adm-field="c_aisj_parent_questionaire_q2"
                                        t-att-value="application_id.c_aisj_parent_questionaire_q2"/>

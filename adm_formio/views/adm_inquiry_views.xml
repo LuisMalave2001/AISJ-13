@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="adm_inquiry_view_form_inherit" model="ir.ui.view">
+        <field name="name">adm.inquiry.view.form.inherit</field>
+        <field name="model">adm.inquiry</field>
+        <field name="inherit_id" ref="adm.view_inquiry_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']/../.." position="before">
+                <div name="button_box" class="oe_button_box">
+                    <button name="action_open_forms" class="oe_stat_button" icon="fa-file" type="object"
+                        context="{'default_reference': 'adm.inquiry,' + str(active_id)}">
+                        <field string="Forms" name="form_count" widget="statinfo"/>
+                    </button>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

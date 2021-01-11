@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'Form.io Extensions',
+    'name': 'Form.io Reporting',
 
-    'summary': """ Form.io Extensions """,
+    'summary': """ Form.io Reporting """,
 
     'description': """
-        Form.io Extensions
+        Form.io Reporting
     """,
 
     'author': 'Eduwebgroup',
@@ -16,15 +16,11 @@
 
     'depends': [
         'formio',
-        'website_formio',
     ],
 
     'data': [
         'security/ir.model.access.csv',
+        'views/formio_form_report_views.xml',
         'views/formio_form_views.xml',
-        'views/formio_builder_views.xml',
-        'views/formio_automation_views.xml',
-        'views/formio_form_portal_templates.xml',
-        'data/website_page_data.xml',
     ],
 }

@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_formio_form_report,access.formio.form.report,model_formio_form_report,formio.group_formio_user_all_forms,1,1,1,1

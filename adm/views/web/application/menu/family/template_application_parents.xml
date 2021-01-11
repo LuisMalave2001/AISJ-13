@@ -246,14 +246,14 @@
                             </div>
 
                             <div class="col-12 col-md-6 form-group">
-                                <label>Work email<span class="text-danger"> *</span></label>
+                                <label>Work email</label>
                                 <input class="form-control" type="text" name="work_email"
                                        data-adm-field="work_email"
                                        t-att-value="guardian_relationship_id.partner_2.work_email"/>
                             </div>
 
                             <div class="col-12 col-md-6 form-group">
-                                <label>Mobile Phone<span class="text-danger"> *</span></label>
+                                <label>Mobile Phone</label>
                                 <input class="form-control" type="text" name="mobile_phone"
                                        data-adm-field="phone"
                                        t-att-value="guardian_relationship_id.partner_2.phone"/>

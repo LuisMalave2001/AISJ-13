@@ -39,7 +39,6 @@ class GradeLevel(models.Model):
 
     name = fields.Char(string="Name", required=True)
     sequence = fields.Integer(default=1)
-    active_admissions = fields.Boolean('Active admissions')
     school_code_id = fields.Many2one("school_base.school_code", string="School code")
     district_code_id = fields.Many2one(related="school_code_id.district_code_id")
     capacity = fields.Integer()

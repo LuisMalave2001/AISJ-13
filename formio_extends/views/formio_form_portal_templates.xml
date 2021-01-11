@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_formio_inherit" inherit_id="formio.portal_my_formio">
+        <xpath expr="//t[@t-call='portal.portal_table']/thead/th" position="after">
+            <th>Reference</th>
+        </xpath>
+        <xpath expr="//span[@t-field='form.title']/.." position="after">
+            <td>
+                <span t-field="form.reference.display_name"/>
+            </td>
+        </xpath>
+    </template>
+</odoo>
