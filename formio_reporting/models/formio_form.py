@@ -76,6 +76,19 @@ class FormioForm(models.Model):
                     final_labels.append(datagrid_value_component["label"])
                     self._create_report_from_component(" / ".join(final_keys), datagrid_value_value,
                         datagrid_value_component, label=" / ".join(final_labels))
+        elif component_type == "container":
+            container_components = component.get("components", [])
+            container_components_dict = {}
+            for container_component in container_components:
+                if container_component["type"] == "columns":
+                    for column in container_component["columns"]:
+                        for column_component in column["components"]:
+                            container_components_dict[column_component["key"]] = column_component
+                container_components_dict[container_component["key"]] = container_component
+            for container_key, container_value in value.items():
+                if container_key not in container_components_dict:
+                    continue
+                self._create_report_from_component(container_key, container_value, container_components_dict[container_key])
         else:
             if type(value) in [list, dict]:
                 return
