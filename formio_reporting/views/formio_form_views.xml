@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="formio_form_view_form_inherit" model="ir.ui.view">
+        <field name="name">formio.form.view.form.inherit</field>
+        <field name="model">formio.form</field>
+        <field name="inherit_id" ref="formio.view_formio_form_form"/>
+        <field name="arch" type="xml">
+            <page name="data" position="after">
+                <page name="reporting" string="Reporting">
+                    <field name="form_report_ids" readonly="1">
+                        <tree>
+                            <field name="name"/>
+                            <field name="label"/>
+                            <field name="value"/>
+                        </tree>
+                    </field>
+                </page>
+            </page>
+        </field>
+    </record>
+</odoo>
