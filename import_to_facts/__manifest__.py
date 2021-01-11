@@ -21,7 +21,9 @@
     'depends': ['base', 'school_base', 'mail', 'website', 'contacts', 'adm'],
 
     # always loaded
-    'data': [ 'views/res_config_settings_views.xml',
+    'data': [
+        'views/res_config_settings_views.xml',
+        'views/views.xml',
         'security/ir.model.access.csv',
     ],
     'demo':[]

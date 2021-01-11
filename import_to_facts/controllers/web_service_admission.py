@@ -1,5 +1,7 @@
 import json
 
+from formiodata.components import selectboxesComponent
+
 from odoo import http
 import datetime
 
@@ -18,7 +20,64 @@ class AdmisionController(http.Controller):
     para insertarlas en FACTS
     """
 
-    # csrf: hay que añadir este parametro siu es POST, PUT, etc, para todo
+    # devuelve formato pretty del JSON
+    def json_to_pretty_format(self, json_data):
+
+        for key,item in json_data.items():
+            aux_json[key] = item
+
+        return aux_json
+
+    # devuelve la información en formato json dependiendo de la configuracion del webservice
+    def get_json_from_config(self, value, data):
+        result = ''
+        if not value.fields:
+            result += '"%s": "%s",' % (value.alias_field, data)
+        else:
+            result += '"%s":{' % value.alias_field
+            for item in value.fields:
+                if len(data) > 1:
+                    result = result[0: -1] + '[{'
+                for item_data in data:
+                    result += self.get_json_from_config(item, item_data[item.field_id.name])
+                    if len(data) > 1:
+                        if result[-1] == ',':
+                            result = result[0: -1]
+                        result += '},{'
+                if len(data) > 1:
+                    result = result[0: -2] + ']'
+            if result[-1] == ',':
+                result = result[0: -1]
+            if result[-1] != ']':
+                result += '}'
+            result += ','
+        return result
+        # csrf: hay que añadir este parametro siu es POST, PUT, etc, para todo
+
+    # # devuelve la información en formato json dependiendo de la configuracion del webservice
+    # def getJsonFromConfig(self, value, data):
+    #     result = ''
+    #     if not value.fields:
+    #         result += '"%s": "%s",' % (value.alias_field, data)
+    #     else:
+    #         result += '"%s":{' % value.alias_field
+    #         for item in value.fields:
+    #             result += self.getJsonFromConfig(item, data[item.field_id.name])
+    #         if result[-1] == ',':
+    #             result = result[0: -1]
+    #         result += '},'
+    #     return result
+    #     # csrf: hay que añadir este parametro siu es POST, PUT, etc, para todo
+
+    def cleaned_json(self, value, appl):
+        raw_res = self.get_json_from_config(value.panel_configuration, appl)
+        if raw_res[-1] == ',':
+            raw_res = raw_res[0: -1]
+        if raw_res[-2::] == '}]':
+            raw_res += '}'
+        json_res = '{' + raw_res + '}';
+        return json_res
+
     # menos para GET.
     @http.route("/import_to_facts/getAdmissions", auth="public", methods=["GET"], cors='*')
     def get_adm_uni(self, **params):
@@ -34,43 +93,63 @@ class AdmisionController(http.Controller):
 
         # Array con los campos del alumno y de las familias y los partners
         partner_fields = ["first_name", "middle_name", "last_name"]
-        # partner_fields = ["company_type", "type", "first_name",
-        #                   "middle_name", "last_name", "street", "street2",
-        #                   "city", "state_id", "zip", "country_id",
-        #                   "function", "phone", "mobile", "email", "website",
-        #                   "title", "lang", "category_id", "vat",
-        #                   "company_id", "citizenship",
-        #                   "identification", "marital_status",
-        #                   "parental_responsability",
-        #                   "title", "work_address", "work_phone", "child_ids",
-        #                   "user_id", "person_type", "grade_level_id",
-        #                   "homeroom", "student_status",
-        #                   "comment_facts", "facts_id", "facts_id_int",
-        #                   "is_in_application", "application_id",
-        #                   "inquiry_id", "gender", "relationship_ids",
-        #                   "family_ids"]
 
-        #tomamos los campos seleccionados en la opcion
+        # tomamos los campos seleccionados en la opcion
         config_parameter = http.request.env['ir.config_parameter'].sudo()
         field_ids = config_parameter.get_param('adm_application_json_field_ids', False)
 
-        search_domain =[]
-        required_status_str = config_parameter.get_param('required_status_application_ids', False)
-        required_status_ids = [
-            int(e) for e in required_status_str.split(',')
-            if e.isdigit()
-        ]
+        search_domain = []
+        required_status_ids = []
+        required_status_str = config_parameter.get_param('required_status_ids', False)
+        if required_status_str:
+            required_status_ids = [
+                int(e) for e in required_status_str.split(',')
+                if e.isdigit()
+            ]
+
+        webservice_configurator_str = config_parameter.get_param('adm_application_webservice_configurator_ids', False)
+        webservice_configuration_ids = []
+        if webservice_configurator_str:
+            webservice_configuration_ids = [
+                int(e) for e in webservice_configurator_str.split(',')
+                if e.isdigit()
+            ]
+        # tomamos todas las configuraciones para buscar las que coincidan con el parametro con el nombre de la configuracion solicitada
+        configuratorWebService_ids = http.request.env['import_to_facts.webservice_configurator'].browse(
+            webservice_configuration_ids)
+
+        # toammaos el parametro de la url
+        param_config = params['config_name']
+
+        selected_config = (configuratorWebService_ids.filtered(
+            lambda config: str(config.name) == str(param_config)))
+
+        # raw_json = self.getJsonFromConfig(selected_config.panel_configuration)
+        # json_res = '{'+raw_json+'}';
+
+        adm_application_test = http.request.env['adm.application'].sudo().browse([13])
+
+        json_res = self.cleaned_json(selected_config, adm_application_test);
+        json_test = json.loads(json_res)
+
+        # tomamos parametro que nos indica si queremos un formato comprimido (si solo tiene un elemento
+        # dentro de un value del dictionario entonces toma ese valor y lo sube de nivel)
+        # Example:
+        # {"applid": {"FACTSid": {"FACTSid_inner": "False"}}} equivale a {"applid": {"FACTSid": "False"}}
+        if 'pretty' in params:
+            json_pretty ={}
+            self.json_to_pretty_format(json.loads(json_res),json_pretty)
+            return json.dumps(json_pretty)
 
         import_field = http.request.env['import_to_facts.import_field'].sudo()
         application_values = []
-        alias_fields ={}
+        alias_fields = {}
 
         if field_ids:
             list_field = field_ids.split(',')
             for data in list_field:
                 application_values.append(import_field.browse(int(data)).field_id.name)
                 alias_fields[import_field.browse(int(data)).field_id.name] = import_field.browse(int(data)).alias_field
-
 
         # DATOS DE LA APPLICATION
         # Crea una variable con el modelo desde donde se va a tomar la
@@ -79,34 +158,17 @@ class AdmisionController(http.Controller):
 
         # filtro del modelo: status = done y el checkBox Imported = False
         # search_domain = [("status_id.type_id", "in", ["done", "stage"])]
-        search_domain = [("status_id","in",required_status_ids)]
+        search_domain = [("status_id", "in", required_status_ids)]
 
         # Tomar informacion basado en el modelo y en el domain IDS
-        application_record = ApplicationEnv.search(search_domain,limit=10)
+        application_record = ApplicationEnv.search(search_domain, limit=10)
 
-        # Obtienes la información basada en los ids anteriores y tomando en
-        # cuenta los campos definifos en la funcion posterior
-        # application_values = application_record.read(
-        #     ["id", "status_type", "first_name", "middle_name", "last_name",
-        #      "contact_time_id", "grade_level", "gender", "father_name",
-        #      "mother_name", "task_ids", "street", "city", "state_id", "zip",
-        #      "country_id", "home_phone", "phone", "email", "date_of_birth",
-        #      "citizenship",
-        #      "first_language", "first_level_language", "second_language",
-        #      "second_level_language", "third_language", "third_level_language",
-        #      "previous_school_ids", "doctor_name", "doctor_phone",
-        #      "doctor_address", "permission_to_treat", "blood_type",
-        #      "medical_conditions_ids", "medical_allergies_ids",
-        #      "medical_medications_ids",
-        #      "relationship_ids", "partner_id", "name", "house_address_ids",
-        #      "sibling_ids",
-        #      ])
         application_values = application_record.read(application_values)
-        #application_values = (http.request.env['res.partner'].sudo().search(search_domain,limit=1)).read(application_values)
+        # application_values = (http.request.env['res.partner'].sudo().search(search_domain,limit=1)).read(application_values)
         application_values_resp = []
         for app_value in application_values:
             aux_item = {}
-            for k,v in app_value.items():
+            for k, v in app_value.items():
                 key = k
                 if k in alias_fields:
                     key = alias_fields[k]
@@ -117,165 +179,7 @@ class AdmisionController(http.Controller):
                     
             application_values_resp.append(aux_item)
 
-        g = 2
-
-        # recorremos el array y vamos tratando los datos. Se modifica el
-        # formato del for: se añade index y enumerate para poder hacer
-        # busquedas
-        # por el index, esto se usa en las familias.
-        # for index, record in enumerate(application_values):
-        #     application_id = application_record[index].sudo()
-        #
-        #     # Convertir fechas a string
-        #     record["date_of_birth"] = (application_id.date_of_birth
-        #                                .strftime('%m/%d/%Y') if
-        #                                application_id.date_of_birth else '')
-        #
-        #     # SchooCode
-        #     if record["grade_level"]:
-        #         record["SCName"] = (application_id.grade_leve
-        #                             .school_code_id.name) or []
-        #
-        #     # Sacamos datos de los Horarios de partner
-        #     # Array para los Horarios de partner
-        #     if record["contact_time_id"]:
-        #         record["horariopartnerDatos"] = (application_id
-        #                                          .contact_time_id
-        #                                          .read(["name",
-        #                                                 "from_time",
-        #                                                 "to_time"])) or []
-        #
-        #     # Sacamos datos de los Hermanos
-        #     # Array para los Hermanos
-        #     record["hermanosDatos"] = (application_id.sibling_ids
-        #                                .read(["name", "age", "school"]))
-        #
-        #     # Array para las task
-        #     record["task"] = (application_id.task_ids
-        #                       .read(["name", "description", "display_name"]))
-        #
-        #     # Sacamos datos de las relationship
-        #     # Array para las relationships
-        #     record["relationship"] = (application_id.relationship_ids
-        #                               .read(["partner_2",
-        #                                      "relationship_type"]))
-        #
-        #     # Sacamos datos del previous school
-        #     # if record["previous_school_ids"]:
-        #
-        #     # Array para los datos del colegio previo
-        #     datosPrev_values = (application_id.previous_school_ids
-        #                         .read(["application_id",
-        #                                "id",
-        #                                "name",
-        #                                "street",
-        #                                "zip",
-        #                                "country_id",
-        #                                "from_date",
-        #                                "to_date",
-        #                                "extracurricular_interests",
-        #                                "city", "state_id",
-        #                                "grade_completed"
-        #                                ]))
-        #
-        #     # Recorremos los datos obtenidos y transformamos las fechas para
-        #     # evitar errores
-        #     for record_school in datosPrev_values:
-        #         # Convertir fechas a string
-        #         record_school["from_date"] = (record_school["from_date"]
-        #                                       .strftime('%m/%d/%Y')
-        #                                       if record_school["from_date"]
-        #                                       else '')
-        #
-        #         record_school["to_date"] = (record_school["from_date"]
-        #                                     .strftime('%m/%d/%Y')
-        #                                     if record_school["to_date"]
-        #                                     else '')
-        #
-        #     record["previousSchool"] = datosPrev_values
-        #
-        #     # Array para los datos de las direcciones
-        #     record["address"] = (application_id.house_address_ids
-        #                          .read(["name",
-        #                                 "country_id",
-        #                                 "state_id",
-        #                                 "street",
-        #                                 "zip",
-        #                                 ]))
-        #
-        #     # Sacamos datos de las medicals conditions
-        #     # if record["medical_conditions_ids"]:
-        #
-        #     # Array para los datos medicos Conditions
-        #     record["medicalConditions"] = (application_id
-        #                                    .medical_conditions_ids
-        #                                    .read(["name", "comment"]))
-        #
-        #     # Sacamos datos de las medicals allergies
-        #     # if record["medical_allergies_ids"]:
-        #
-        #     # Array para los datos medicos Allergies
-        #     record["medicalAllergies"] = (application_id
-        #                                   .medical_allergies_ids
-        #                                   .read(["name", "comment"]))
-        #
-        #     # Sacamos datos de las medicals medications
-        #     # if record["medical_medications_ids"]:
-        #
-        #     # Array para los datos medicos Medications
-        #     record["medicalMedications"] = (application_id
-        #                                     .medical_medications_ids
-        #                                     .read(["name", "comment"]))
-        #
-        #     # DATOS DEL ALUMNO
-        #
-        #     # Sacamos datos del alumno
-        #     # if record["partner_id"]:
-        #
-        #     # Array para los datos alumnos
-        #     # Tomar informacion basado en el modelo y en el domain IDS
-        #     application_partner_id = application_id.partner_id
-        #     record["alumnoDatos"] = application_partner_id.read(partner_fields)
-        #
-        #     # DATOS DE LA FAMILIA
-        #     # Array para los datos de cada familia
-        #     record["familiaDatos"] = []
-        #
-        #     family_id = application_partner_id.family_ids[0]
-        #     record["familiaDatos"] = family_id.read(partner_fields)
-        #
-        #     # DATOS DE LOS CONTACTOS
-        #     # Array para los datos de cada partner
-        #     family_member_ids = (family_id.member_ids.filtered(
-        #         lambda member_id: member_id != application_partner_id))
-        #     record["partnerDatos"] = family_member_ids.read(partner_fields)
-        #
-        #     # DATOS DE LOS FICHEROS
-        #     # Array para los datos de cada fichero de la aplicacion
-        #     record["datosFicheros"] = []
-        #
-        #     # crea una variable con el modelo desde donde se va a tomar la
-        #     # información
-        #     attachments = http.request.env['ir.attachment'].sudo()
-        #
-        #     # filtro del modelo basados en parametros de la url
-        #     search_domain_attach = [("res_model", "=", "adm.application"),
-        #                             ("res_id", "=", application_id.id)]
-        #
-        #     # Tomar informacion basado en el modelo y en el domain IDS
-        #     attachments_record = attachments.search(search_domain_attach)
-        #
-        #     # Obtienes la información basada en los ids anteriores y tomando
-        #     # en cuenta los campos definifos en la funcion posterior
-        #     # mimetype: tpo de archivo, datas: arhivo en binario
-        #     attachments_values = attachments_record.read(["id", "name"])
-        #
-        #     record["datosFicheros"] = json.dumps(attachments_values)
-
-        # pintar la información obtenida, esto lo utilizamos para parsearlo
-        # en el ajax.
-        # return json.dumps(application_values)
-        return json.dumps(application_values_resp)
+        return json_res
 
     @http.route("/admission/adm_insertId", auth="public", methods=["POST"],
                 cors='*', csrf=False)

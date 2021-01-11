@@ -8,4 +8,4 @@ class ImportField(models.Model):
 
     field_id = fields.Many2one('ir.model.fields', string='Odoo field')
     alias_field = fields.Char('Alias')
-
+    selected_field_ids = fields.Many2one('import_to_facts.configuration_panel', string='Parent field')
