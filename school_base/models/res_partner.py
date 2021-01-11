@@ -158,6 +158,11 @@ class Contact(models.Model):
                                   store=True, readonly=True)
     facts_id = fields.Char("Facts id")
 
+    # Facts UDID
+    facts_udid_int = fields.Integer("Facts UDID (Integer)", compute="_converts_facts_udid_id_to_int", store=True,
+                                    readonly=True)
+    facts_udid = fields.Char("Facts UDID")
+    
     # Healthcare
     allergy_ids = fields.One2many("school_base.allergy", "partner_id",
                                   string="Allergies")
@@ -185,6 +190,23 @@ class Contact(models.Model):
                     raise ValidationError(
                         "Another contact has the same facts id!")
 
+    @api.depends("facts_udid")
+    def _converts_facts_udid_id_to_int(self):
+        for partner_id in self:
+            partner_id.facts_udid_int = int(
+                partner_id.facts_udid) if partner_id.facts_udid and partner_id.facts_udid.isdigit() else 0
+
+    @api.constrains("facts_udid")
+    def _check_facts_udid_id(self):
+        for partner_id in self:
+            if partner_id.facts_udid:
+
+                if not partner_id.facts_udid.isdigit():
+                    raise ValidationError("Facts id needs to be an number")
+
+                should_be_unique = self.search_count([("facts_id", "=", partner_id.facts_udid)])
+                if should_be_unique > 1:
+                    raise ValidationError("Another contact has the same facts id!")
     @api.model
     def format_name(self, first_name, middle_name, last_name):
         """

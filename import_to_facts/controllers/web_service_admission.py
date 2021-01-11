@@ -5,6 +5,7 @@ from formiodata.components import selectboxesComponent
 from odoo import http
 import datetime
 import logging
+
 # Se añaden campos:
 # - Siblings
 # - Datos de los hermanos
@@ -16,18 +17,61 @@ import logging
 # Just some clean up
 _logger = logging.getLogger(__name__)
 
+
 class AdmisionController(http.Controller):
     """ Controlador encargado de devolver datos de las admisiones,
     para insertarlas en FACTS
     """
 
     # devuelve formato pretty del JSON
-    def json_to_pretty_format(self, json_data):
+    def json_to_pretty_format(self, json_data, res_json):
+        d = 2
+        # for key, item in json_data.items():
+        #     res_json[key] = item
+        #     self.json_to_pretty_format(item, res_json[key])
+        #     if str(key) in item.items():
+        #         fa = 2
 
-        for key,item in json_data.items():
-            aux_json[key] = item
+    def recur_pretty(self, data, res_json):
+        if not isinstance(data, dict):
+            return data
+        else:
+            for key, value in data.items():
+                if isinstance(value, dict) and str(key) in value:
+                    res_json[key] = self.recur_pretty(value, res_json[key])
+                else:
+                    res_json[key] = value
+                self.recur_pretty(value, res_json[key])
 
-        return aux_json
+        # devuelve la información en formato json dependiendo de la configuracion del webservice
+
+    def get_json_from_config_2(self, value, data):
+        result = ''
+        if not value.fields:
+            result += '"%s": "%s",' % (value.alias_field, data)
+        else:
+            result += '"%s":{' % value.alias_field
+            for item in value.fields:
+                # if len(data) > 1:
+                if value.field_id.ttype in ('one2many', 'many2many'):
+                    result = result[0: -1] + '[{'
+                for item_data in data:
+                    result += self.get_json_from_config(item, item_data[item.field_id.sudo().name])
+                    # if len(data) > 1:
+                    if value.field_id.ttype in ('one2many', 'many2many'):
+                        if result[-1] == ',':
+                            result = result[0: -1]
+                        result += '},{'
+                # if len(data) > 1:
+                if value.field_id.ttype in ('one2many', 'many2many'):
+                    result = result[0: -2] + ']'
+            if result[-1] == ',':
+                result = result[0: -1]
+            if result[-1] != ']':
+                result += '}'
+            result += ','
+        return result
+
 
     # devuelve la información en formato json dependiendo de la configuracion del webservice
     def get_json_from_config(self, value, data):
@@ -36,16 +80,19 @@ class AdmisionController(http.Controller):
             result += '"%s": "%s",' % (value.alias_field, data)
         else:
             result += '"%s":{' % value.alias_field
-            for item in value.fields:
+            for item_data in data:
                 if len(data) > 1:
+                # if value.field_id.ttype in ('one2many', 'many2many'):
                     result = result[0: -1] + '[{'
-                for item_data in data:
+                for item in value.fields:
                     result += self.get_json_from_config(item, item_data[item.field_id.sudo().name])
                     if len(data) > 1:
+                    # if value.field_id.ttype in ('one2many', 'many2many'):
                         if result[-1] == ',':
                             result = result[0: -1]
                         result += '},{'
                 if len(data) > 1:
+                # if value.field_id.ttype in ('one2many', 'many2many'):
                     result = result[0: -2] + ']'
             if result[-1] == ',':
                 result = result[0: -1]
@@ -71,7 +118,7 @@ class AdmisionController(http.Controller):
     #     # csrf: hay que añadir este parametro siu es POST, PUT, etc, para todo
 
     def cleaned_json(self, value, appl):
-        raw_res = self.get_json_from_config(value.panel_configuration, appl)
+        raw_res = self.get_json_from_config_2(value.panel_configuration, appl)
         if raw_res[-1] == ',':
             raw_res = raw_res[0: -1]
         if raw_res[-2::] == '}]':
@@ -82,7 +129,7 @@ class AdmisionController(http.Controller):
     # menos para GET.
     @http.route("/import_to_facts/getAdmissions", auth="public", methods=["GET"], cors='*')
     def get_adm_uni(self, **params):
-        
+
         """ Definiendo la url desde donde va ser posible acceder, tipo de
         metodo,
         cors para habiltiar accesos a ip externas.
@@ -129,8 +176,11 @@ class AdmisionController(http.Controller):
         # raw_json = self.getJsonFromConfig(selected_config.panel_configuration)
         # json_res = '{'+raw_json+'}';
 
-        adm_application_test = http.request.env['adm.application'].sudo().browse([9,13])
-        json_res=''
+        adm_application_test = http.request.env['adm.application'].sudo().browse([1])
+
+        return self.cleaned_json(selected_config, adm_application_test[0])
+
+        json_res = ''
         json_aux_res = '{"applications": ['
         idx = 0
         for adm_aux in adm_application_test:
@@ -138,18 +188,18 @@ class AdmisionController(http.Controller):
                 json_aux_res += ','
             json_res = self.cleaned_json(selected_config, adm_aux);
             json_test = json.loads(json_res)
-            json_aux_res += json.dumps(json_test["appAdm"])
+            json_aux_res += json.dumps(json_test[adm_aux._name])
             idx += 1
-            
+
         json_aux_res += ']}'
-        
+
         # tomamos parametro que nos indica si queremos un formato comprimido (si solo tiene un elemento
         # dentro de un value del dictionario entonces toma ese valor y lo sube de nivel)
         # Example:
         # {"applid": {"FACTSid": {"FACTSid_inner": "False"}}} equivale a {"applid": {"FACTSid": "False"}}
         if 'pretty' in params:
-            json_pretty ={}
-            self.json_to_pretty_format(json.loads(json_res),json_pretty)
+            json_pretty = {}
+            self.json_to_pretty_format(json.loads(json_res), json_pretty)
             return json.dumps(json_pretty)
 
         import_field = http.request.env['import_to_facts.import_field'].sudo()
@@ -187,7 +237,7 @@ class AdmisionController(http.Controller):
                     aux_item[key] = v.strftime('%Y-%m-%d')
                 else:
                     aux_item[key] = v
-                    
+
             application_values_resp.append(aux_item)
 
         return json_aux_res
