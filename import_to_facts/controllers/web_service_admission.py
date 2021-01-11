@@ -51,6 +51,39 @@ class AdmisionController(http.Controller):
             result += '"%s": "%s",' % (value.alias_field, data)
         else:
             result += '"%s":{' % value.alias_field
+            if value.field_id.ttype in ('one2many', 'many2many'):
+                result = result[0: -1] + '[{'
+            for item_data in data:
+                # if len(data) > 1:
+                for item in value.fields:
+                    result += self.get_json_from_config_2(item, item_data[item.field_id.sudo().name])
+
+                if len(data) > 1:
+                    # if value.field_id.ttype in ('one2many', 'many2many'):
+                    if result[-1] == ',':
+                        result = result[0: -1]
+                    result += '},{'
+                # if len(data) > 1:
+            if str(result[-2])+str(result[-1]) == ',{':
+                result = result[0: -3]
+            if result[-1] == ',':
+                result = result[0: -1]
+            if value.field_id.ttype in ('one2many', 'many2many'):
+                result += '}]'
+            else:
+                result += '}'
+
+            result += ','
+        return result
+
+
+    # devuelve la información en formato json dependiendo de la configuracion del webservice
+    def get_json_from_config(self, value, data):
+        result = ''
+        if not value.fields:
+            result += '"%s": "%s",' % (value.alias_field, data)
+        else:
+            result += '"%s":{' % value.alias_field
             for item in value.fields:
                 # if len(data) > 1:
                 if value.field_id.ttype in ('one2many', 'many2many'):
@@ -64,35 +97,6 @@ class AdmisionController(http.Controller):
                         result += '},{'
                 # if len(data) > 1:
                 if value.field_id.ttype in ('one2many', 'many2many'):
-                    result = result[0: -2] + ']'
-            if result[-1] == ',':
-                result = result[0: -1]
-            if result[-1] != ']':
-                result += '}'
-            result += ','
-        return result
-
-
-    # devuelve la información en formato json dependiendo de la configuracion del webservice
-    def get_json_from_config(self, value, data):
-        result = ''
-        if not value.fields:
-            result += '"%s": "%s",' % (value.alias_field, data)
-        else:
-            result += '"%s":{' % value.alias_field
-            for item_data in data:
-                if len(data) > 1:
-                # if value.field_id.ttype in ('one2many', 'many2many'):
-                    result = result[0: -1] + '[{'
-                for item in value.fields:
-                    result += self.get_json_from_config(item, item_data[item.field_id.sudo().name])
-                    if len(data) > 1:
-                    # if value.field_id.ttype in ('one2many', 'many2many'):
-                        if result[-1] == ',':
-                            result = result[0: -1]
-                        result += '},{'
-                if len(data) > 1:
-                # if value.field_id.ttype in ('one2many', 'many2many'):
                     result = result[0: -2] + ']'
             if result[-1] == ',':
                 result = result[0: -1]
@@ -178,7 +182,7 @@ class AdmisionController(http.Controller):
 
         adm_application_test = http.request.env['adm.application'].sudo().browse([1])
 
-        return self.cleaned_json(selected_config, adm_application_test[0])
+        # return self.cleaned_json(selected_config, adm_application_test[0])
 
         json_res = ''
         json_aux_res = '{"applications": ['
@@ -188,7 +192,7 @@ class AdmisionController(http.Controller):
                 json_aux_res += ','
             json_res = self.cleaned_json(selected_config, adm_aux);
             json_test = json.loads(json_res)
-            json_aux_res += json.dumps(json_test[adm_aux._name])
+            json_aux_res += json.dumps(json_test[list(json_test.keys())[0]])
             idx += 1
 
         json_aux_res += ']}'

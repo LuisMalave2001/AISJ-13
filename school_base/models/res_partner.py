@@ -162,7 +162,7 @@ class Contact(models.Model):
     facts_udid_int = fields.Integer("Facts UDID (Integer)", compute="_converts_facts_udid_id_to_int", store=True,
                                     readonly=True)
     facts_udid = fields.Char("Facts UDID")
-    
+
     # Healthcare
     allergy_ids = fields.One2many("school_base.allergy", "partner_id",
                                   string="Allergies")
