@@ -37,6 +37,7 @@
              'views/res_config_settings_views.xml',
              'views/res_partner_views.xml',
              'views/res_user_views.xml',
+             'views/school_base_models_views.xml',
 
              # Web templates
              'views/web/application/menu/family/template_application_parents.xml',

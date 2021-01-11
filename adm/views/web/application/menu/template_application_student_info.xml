@@ -7,7 +7,7 @@
                 <link rel="stylesheet" href="/adm/static/src/css/check_animation.css"/>
                 <t t-call-assets="adm.assets_application_student_info" defer_load="True"/>
             </t>
-            <t t-set="title">Student info</t>
+            <t t-set="title">Academic Information</t>
 
             <t t-set="url_next" t-value="'/admission/applications/%s/schools' % application_id.id"/>
 
@@ -309,12 +309,11 @@
                         <label>Which semester are you applying for?<span class="text-danger">*</span></label>
                         <select name="applying_semester" class="form-control"
                                 data-adm-field="applying_semester">
-                            <!--                                                    <t t-esc="applying_semester_values"/>-->
+                            <option value="-1" selected="selected" disabled="disabled">
+                                -Select a state-
+                            </option>
                             <t t-foreach="applying_semester_values"
                                t-as="applying_semester_value">
-                                <option value="-1" selected="selected" disabled="disabled">
-                                    -Select a state-
-                                </option>
                                 <option t-att-selected="application_id.applying_semester == applying_semester_value['value']"
                                         t-att-value="applying_semester_value['value']">
                                     <t t-esc="applying_semester_value['name']"/>

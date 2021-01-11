@@ -28,7 +28,7 @@ class ApplicationController(AdmissionController):
         grade_levels = (request.env['school_base.grade_level'].sudo()
                         .search([('active_admissions', '=', True)]))
         school_years = (request.env['school_base.school_year'].sudo()
-                        .search([]))
+                        .search([('active_admissions', '=', True)]))
         companies = (http.request.env['res.company'].sudo()
                      .search([('country_id', '!=', False)]))
 

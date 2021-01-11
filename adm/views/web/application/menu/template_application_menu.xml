@@ -18,7 +18,7 @@
                     </li>
                     <li class="nav-item nav-item-menu" id="nav-itm-appl">
                         <a t-attf-href="/admission/applications/#{application_id.id}/info" class="nav-link">
-                            STUDENT INFO
+                            Academic Information
                         </a>
                     </li>
                     <li class="nav-item nav-item-menu" id="nav-itm-acad">

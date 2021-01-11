@@ -44,9 +44,9 @@ class AdmissionController(http.Controller):
                                   .search([]))
 
         grade_level_ids = (request.env['school_base.grade_level'].sudo()
-                           .search([]))
+                           .search([('active_admissions', '=', True)]))
         school_year_ids = (request.env['school_base.school_year'].sudo()
-                           .search([]))
+                           .search([('active_admissions', '=', True)]))
 
         language_ids = http.request.env['adm.language'].search([])
         language_level_ids = request.env['adm.language.level'].search([])
