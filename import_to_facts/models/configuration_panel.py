@@ -11,7 +11,7 @@ class ConfiguratorPanel(models.Model):
     # parent_id = fields.Many2one("res.partner", string="Customer")
     field_id = fields.Many2one('ir.model.fields', string='Odoo field')
     alias_field = fields.Char('Alias')
-
+    domain = fields.Char("Domain")
     # adm_application_import_field_ids = fields.Many2many(
     #     'import_to_facts.import_field',
     #     string="Imported fields",
@@ -20,7 +20,7 @@ class ConfiguratorPanel(models.Model):
     # )
     parent_id = fields.Many2one("import_to_facts.configuration_panel", string="Parent ID")
     fields = fields.One2many("import_to_facts.configuration_panel", "parent_id",
-                                   string="Configuration Panel Childs")
+                             string="Configuration Panel Childs")
 
     # recur_conf_panel_ids = fields.Many2many(
     #     'import_to_facts.configuration_panel',

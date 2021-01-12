@@ -5,6 +5,7 @@ from formiodata.components import selectboxesComponent
 from odoo import http
 import datetime
 import logging
+import re
 
 # Se añaden campos:
 # - Siblings
@@ -32,6 +33,18 @@ class AdmisionController(http.Controller):
         #     if str(key) in item.items():
         #         fa = 2
 
+    def compute_domain(self, domain_str):
+        res_list = []
+        if not domain_str or domain_str in ('', 'False'):
+            return res_list
+        raw_data = re.split(r',\s*(?![^()]*\))', domain_str[1:-1])
+        for val in raw_data:
+            if val == "'&'" or val == "'|'":
+                res_list.append(val[1:-1])
+            else:
+                res_list.append(val[1:-1].replace("'", "").split(","))
+        return res_list
+
     def recur_pretty(self, data, res_json):
         if not isinstance(data, dict):
             return data
@@ -56,7 +69,11 @@ class AdmisionController(http.Controller):
             for item_data in data:
                 # if len(data) > 1:
                 for item in value.fields:
-                    result += self.get_json_from_config_2(item, item_data[item.field_id.sudo().name])
+                    aux_domain = self.compute_domain(item.domain)
+                    aux_val = item_data[item.field_id.sudo().name]
+                    if len(aux_domain) > 0:
+                        aux_val = item_data[item.field_id.sudo().name].search(aux_domain)
+                    result += self.get_json_from_config_2(item, aux_val)
 
                 if len(data) > 1:
                     # if value.field_id.ttype in ('one2many', 'many2many'):
@@ -64,7 +81,7 @@ class AdmisionController(http.Controller):
                         result = result[0: -1]
                     result += '},{'
                 # if len(data) > 1:
-            if str(result[-2])+str(result[-1]) == ',{':
+            if str(result[-2]) + str(result[-1]) == ',{':
                 result = result[0: -3]
             if result[-1] == ',':
                 result = result[0: -1]
@@ -75,7 +92,6 @@ class AdmisionController(http.Controller):
 
             result += ','
         return result
-
 
     # devuelve la información en formato json dependiendo de la configuracion del webservice
     def get_json_from_config(self, value, data):
@@ -179,15 +195,15 @@ class AdmisionController(http.Controller):
 
         # raw_json = self.getJsonFromConfig(selected_config.panel_configuration)
         # json_res = '{'+raw_json+'}';
-
-        adm_application_test = http.request.env['adm.application'].sudo().browse([9,13])
+        domain_data = self.compute_domain(selected_config.domain)
+        data_items = http.request.env[selected_config.model_id.model].sudo().search(domain_data)
 
         # return self.cleaned_json(selected_config, adm_application_test[0])
 
         json_res = ''
-        json_aux_res = '{"applications": ['
+        json_aux_res = '{"%s": [' % selected_config.label
         idx = 0
-        for adm_aux in adm_application_test:
+        for adm_aux in data_items:
             if idx > 0:
                 json_aux_res += ','
             json_res = self.cleaned_json(selected_config, adm_aux);
