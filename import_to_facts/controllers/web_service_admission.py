@@ -71,8 +71,11 @@ class AdmisionController(http.Controller):
                 for item in value.fields:
                     aux_domain = self.compute_domain(item.domain)
                     aux_val = item_data[item.field_id.sudo().name]
+                    # capamos los ids filtrados anteriormente
                     if len(aux_domain) > 0:
+                        aux_domain.append(['id', 'in', aux_val.ids])
                         aux_val = item_data[item.field_id.sudo().name].search(aux_domain)
+
                     result += self.get_json_from_config_2(item, aux_val)
 
                 if len(data) > 1:
