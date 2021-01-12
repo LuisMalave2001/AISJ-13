@@ -41,6 +41,7 @@ class GradeLevel(models.Model):
     sequence = fields.Integer(default=1)
     school_code_id = fields.Many2one("school_base.school_code", string="School code")
     district_code_id = fields.Many2one(related="school_code_id.district_code_id")
+    user_type_id = fields.Many2one('school_base.grade_level.type')
     capacity = fields.Integer()
 
     @api.onchange('school_code_id')
@@ -48,6 +49,20 @@ class GradeLevel(models.Model):
         self.ensure_one()
         school_code_ids = self.district_code_id.school_code_ids.ids
         return {'domain': {'school_code_id': [('id', 'in', school_code_ids)]}}
+
+
+class SchoolBaseGradeLevelType(models.Model):
+    _name = 'school_base.grade_level.type'
+    _description = "Grade level type"
+
+    type = fields.Selection(
+        [
+            ('elementary', _("Elementary")),
+            ('middle_school', _("Middle school")),
+            ('high_school', _("High school")),
+            ],
+        )
+    name = fields.Char()
 
 
 class DistrictCode(models.Model):

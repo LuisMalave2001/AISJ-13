@@ -1,6 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 school_base_school_year_access,school_base_school_year_access,school_base.model_school_base_school_year,,1,1,1,1
 school_base_grade_level_access,school_base_grade_level_access,school_base.model_school_base_grade_level,,1,1,1,1
+school_base_grade_level_type_access,school_base_grade_level_type_access,school_base.model_school_base_grade_level_type,,1,1,1,1
 school_base_school_code_access,school_base_school_code_access,school_base.model_school_base_school_code,,1,1,1,1
 school_base_district_code_access,school_base_district_code_access,school_base.model_school_base_district_code,,1,1,1,1
 school_base_allergy_access,school_base_allergy_access,school_base.model_school_base_allergy,,1,1,1,1

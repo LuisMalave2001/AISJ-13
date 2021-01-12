@@ -25,6 +25,12 @@
         <field name="view_mode">tree,form</field>
     </record>
 
+    <record model="ir.actions.act_window" id="action_school_configuration_grade_level_types">
+        <field name="name">Grade level types</field>
+        <field name="res_model">school_base.grade_level.type</field>
+        <field name="view_mode">tree</field>
+    </record>
+
     <menuitem id="school_configuration_menu" name="School Configurations"/>
 
     <menuitem id="school_configuration_menu_year" action="action_school_configuration_years"
@@ -39,5 +45,9 @@
     <menuitem id="school_configuration_menu_district_code" action="action_school_configuration_district_codes"
               name="District code" parent="school_configuration_menu"/>
 
+    <menuitem id="school_configuration_menu_settings" name="Settings" parent="school_configuration_menu"/>
+
+    <menuitem id="school_configuration_menu_grade_level_types" action="action_school_configuration_grade_level_types"
+              name="Grade level types" parent="school_configuration_menu_settings"/>
 
 </odoo>

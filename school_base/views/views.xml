@@ -50,6 +50,15 @@
         </field>
     </record>
 
-
+    <record id="school_base_grade_level_type_view_tree" model="ir.ui.view">
+        <field name="name">school.base.grade.level.type.view.tree</field>
+        <field name="model">school_base.grade_level.type</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="type"/>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
 
 </odoo>
