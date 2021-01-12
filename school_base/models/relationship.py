@@ -1,7 +1,7 @@
 '''
 Created on Feb 1, 2020
 
-@author: LuisMora
+@author: LuisMora s
 '''
 from odoo import models, fields
 
