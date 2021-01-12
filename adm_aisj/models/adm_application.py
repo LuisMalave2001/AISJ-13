@@ -142,6 +142,10 @@ class AdmApplication(models.Model):
     c_aisj_schools_q1 = fields.Selection([('yes', 'Yes'), ('no', 'No')], string="Has your child applied to The American International School of Jeddah before?")
     c_aisj_schools_q2 = fields.Selection([('yes', 'Yes'), ('no', 'No')], string="Has your child attended The American International School of Jeddah Before?")
 
+    c_aisj_elementary_q1 = fields.Boolean(string="Has your child been previously enrolled in a daycare/preschool program?")
+    c_aisj_elementary_q2 = fields.Boolean(string="Is your child toilet trained?")
+    c_aisj_elementary_q3 = fields.Boolean(string="Does your child communicate using words/phrases?")
+
     grant_aisj_photo_permission = fields.Boolean(string="Grant Aisj photo permission")
 
 

@@ -430,6 +430,14 @@
                         </div>
                     </div>
                 </section>
+                <section t-if="application_id.grade_level.user_type_id.type == 'elementary'" class="card mb-2">
+<!--                <section class="card mb-2">-->
+                    <div class="card-body">
+                        <div class="row">
+                            <h1>Hola</h1>
+                        </div>
+                    </div>
+                </section>
             </div>
         </xpath>
     </template>

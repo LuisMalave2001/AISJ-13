@@ -32,6 +32,7 @@
         'data/name_sorting.xml',
         'data/add_static.xml',
         'data/settings_default.xml',
+        'data/gender_data.xml',
 
         'views/inherited/res_partner.xml',
         'views/res_company.xml',
