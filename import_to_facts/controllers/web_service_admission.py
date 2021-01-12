@@ -196,7 +196,7 @@ class AdmisionController(http.Controller):
         # raw_json = self.getJsonFromConfig(selected_config.panel_configuration)
         # json_res = '{'+raw_json+'}';
         domain_data = self.compute_domain(selected_config.domain)
-        data_items = http.request.env[selected_config.model_id.model].sudo().search(domain_data)
+        data_items = http.request.env[selected_config.sudo().model_id.model].sudo().search(domain_data)
 
         # return self.cleaned_json(selected_config, adm_application_test[0])
 
