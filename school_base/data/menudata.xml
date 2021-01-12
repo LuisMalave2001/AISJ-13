@@ -88,6 +88,7 @@
         <field name="name">Gender</field>
         <field name="res_model">school_base.gender</field>
         <field name="view_mode">tree,form</field>
+    </record>
 
     <record model="ir.actions.act_window" id="action_school_configuration_grade_level_types">
         <field name="name">Grade level types</field>
