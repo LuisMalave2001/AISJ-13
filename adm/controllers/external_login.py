@@ -17,19 +17,11 @@ class ExternalLogin(http.Controller):
                 methods=["GET"],
                 website=True)
     def logging_from_facts(self, **params):
-        # allow_urls = (request.env['ir.config_parameter'].sudo()
-        #               .get_param('allow_urls', ''))
-        # admin_pass = (request.env['ir.config_parameter'].sudo()
-        #               .get_param('admin_pass', ''))
         if 'parent_email' in params and params['parent_email']:
             parent_email = params['parent_email']
             user_id = (request.env["res.users"].sudo()
                     .search([('email', '=ilike', parent_email)]))
             if user_id:
-                # uid = request.session.authenticate(
-                #     request.session.db,
-                #     'admin',
-                #     admin_pass)
 
                 request.session.uid = user_id.id
                 request.session.login = parent_email
@@ -40,14 +32,3 @@ class ExternalLogin(http.Controller):
         route = '/admission/%s?family_id=%s' % (page, family_id)
 
         return request.redirect(route)
-        # if ('HTTP_ORIGIN' in request.httprequest.headers.environ):
-        #     origen_url = request.httprequest.headers.environ['HTTP_ORIGIN']
-        #
-        # ApplicationEnv = request.env["adm.application"]
-        #
-        # application_ids = ApplicationEnv.sudo().search([("family_id", "=", 481)])
-        #
-        # response = request.render('adm.template_admission_application_list', {
-        #     "application_ids": application_ids,
-        # })
-        # return response

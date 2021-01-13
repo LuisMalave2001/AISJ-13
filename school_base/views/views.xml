@@ -76,7 +76,7 @@
         </field>
     </record>
 
-    <record model="ir.ui.view" id="view_relationship_tree">
+    <record id="view_relationship_tree" model="ir.ui.view">
         <field name="name">Relationship</field>
         <field name="model">school_base.relationship</field>
         <field name="arch" type="xml">
@@ -91,6 +91,18 @@
                 <field name="grand_parent"/>
                 <field name="grade_related"/>
                 <field name="family_portal"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_relationship_type_tree" model="ir.ui.view">
+        <field name="name">Relationship</field>
+        <field name="model">school_base.relationship_type</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="key"/>
             </tree>
         </field>
     </record>

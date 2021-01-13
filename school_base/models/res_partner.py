@@ -145,14 +145,15 @@ class Contact(models.Model):
     school_code_id = fields.Many2one('school_base.school_code', string='Current school code')
     grade_level_id = fields.Many2one("school_base.grade_level", string="Grade Level")
     student_status = fields.Char("Student status (Deprecated)", help="(This field is deprecated)")
-    student_status_id = fields.Many2one("school_base.enrollment.status", string="Student status")
+    # student_status_id = fields.Many2one("school_base.enrollment.status", string="Student status")
 
     # Fields for next student status, grade leve, status, etc...
     next_school_code_id = fields.Many2one('school_base.school_code', string='Current school code')
     next_grade_level_id = fields.Many2one("school_base.grade_level", string="Next grade level")
 
-    # student_next_status_id = fields.Selection(SELECT_STATUS_TYPES, string="Student next status")
-    student_next_status_id = fields.Many2one("school_base.enrollment.status", string="Student next status")
+    student_next_status_id = fields.Selection(SELECT_STATUS_TYPES, string="Student next status")
+    student_status_id = fields.Selection(SELECT_STATUS_TYPES, string="Student next status")
+    # student_next_status_id2 = fields.Many2one("school_base.enrollment.status", string="Student next status")
 
     # School information
     homeroom = fields.Char("Homeroom")

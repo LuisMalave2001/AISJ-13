@@ -113,19 +113,9 @@ class SubStatus(models.Model):
     _description = "Enrollment sub status"
 
     # status_id = fields.Selection(SELECT_STATUS_TYPES, string='Status')
-    status_id = fields.Many2one("school_base.enrollment.status", string='Status')
+    status_id = fields.Selection([('1', '1')], string='Status')
     name = fields.Char(string="Name", required=True, translate=True)
     key = fields.Char(string="Key")
-
-class RelationshipType(models.Model):
-    """ SubStatus for students """
-    _name = 'school_base.relationship_type'
-    _description = "Relationship Type"
-    _order = "sequence"
-
-    name = fields.Char(string="Relationship type", required=True, translate=True)
-    key = fields.Char(string="Key")
-    sequence = fields.Integer(default=1)
 
 
 class MaritalStatus(models.Model):

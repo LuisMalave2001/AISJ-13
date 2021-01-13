@@ -14,7 +14,6 @@ adm_application_status_access,adm.adm_application_status_access,adm.model_adm_ap
 adm_application_language_access,adm.adm_application_language_access,adm.model_adm_application_language,,1,1,1,1
 adm_application_other_contacts_access,adm.adm_application_other_contacts_access,adm.model_adm_application_other_contacts,,1,1,1,1
 adm_previous_school_description_access,adm.adm_previous_school_description_access,adm.model_adm_previous_school_description,,1,1,1,1
-adm_relationship_access,adm.adm_relationship_access,adm.model_adm_relationship,,1,1,1,1
 adm_house_address_access,adm.adm_house_address_access,adm.model_adm_house_address,,1,1,1,1
 adm_medical_allergy_access,adm.adm_medical_allergy_access,adm.model_adm_medical_allergy,,1,1,1,1
 adm_medical_condition_access,adm.adm_medical_condition_access,adm.model_adm_medical_condition,,1,1,1,1

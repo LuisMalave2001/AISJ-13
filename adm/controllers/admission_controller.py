@@ -20,16 +20,19 @@ class AdmissionController(http.Controller):
     def compute_view_render_params(self, application_id: Application):
         application_id = application_id.sudo()
 
-        relationship_types = (AdmissionController
-                              ._get_values_for_selection_fields(
-                                    'adm.relationship', 'relationship_type'))
+        # relationship_types = (AdmissionController
+        #                       ._get_values_for_selection_fields(
+        #                             'adm.relationship', 'relationship_type'))
+
+        relationship_types = request.env['school_base.relationship_type'].sudo().search([])
+
         marital_status_types = (AdmissionController
                                 ._get_values_for_selection_fields(
                                         'res.partner', 'marital_status'))
 
-        # custodial_rights_types = (AdmissionController
+        # custody_types = (AdmissionController
         #                           ._get_values_for_selection_fields(
-        #                             'adm.relationship', 'custodial_rights'))
+        #                             'adm.relationship', 'custody'))
 
         applying_semester_values = (AdmissionController
                                     ._get_values_for_selection_fields(
@@ -72,7 +75,7 @@ class AdmissionController(http.Controller):
             'school_year_ids': school_year_ids,
             'relationship_types': relationship_types,
             'marital_status_types': marital_status_types,
-            # 'custodial_rights_types': custodial_rights_types,
+            # 'custody_types': custody_types,
             }
 
     @staticmethod
@@ -182,6 +185,11 @@ class AdmissionController(http.Controller):
         the application with it, that's all
         """
         json_request = request.jsonrequest
-        write_vals = self._parse_json_to_odoo_fields(application_id.sudo(),
+
+        if not json_request.get('family_id', False) or application_id.family_id:
+            json_request["family_id"] = application_id.sudo().responsible_user_id.partner_id.family_ids[0].id
+
+        application_id = application_id.with_context({'default_family_id': json_request["family_id"]}).sudo()
+        write_vals = self._parse_json_to_odoo_fields(application_id,
                                                      json_request)
         application_id.sudo().write(write_vals)

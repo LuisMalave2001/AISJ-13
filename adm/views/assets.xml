@@ -26,11 +26,18 @@
         <link rel="stylesheet" type="text/scss" href="/adm/static/src/scss/application_signature.scss"/>
     </template>
 
+    <template id="assets_application_create" name="Assets Application Create">
+        <script type="text/javascript" src="/adm/static/src/js/application/create.js"></script>
+        <link rel="stylesheet" href="/adm/static/src/css/form_application.css"/>
+        <link rel="stylesheet" type="text/scss" href="/adm/static/src/scss/family_select.scss"/>
+    </template>
+
     <template id="assets_application_common" name="Assets Application Common">
         <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.js"></script>
         <link rel="stylesheet" href="/adm/static/src/css/main.css"/>
         <script type="text/javascript" src="/adm/static/src/js/jquery_fix.js"></script>
         <script type="text/javascript" src="/adm/static/src/js/application/common.js"></script>
+        <link rel="stylesheet" type="text/scss" href="/adm/static/src/scss/family_select.scss"/>
     </template>
 
     <template id="assets_application_family_parents">

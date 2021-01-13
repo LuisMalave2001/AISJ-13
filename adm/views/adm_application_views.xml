@@ -186,6 +186,17 @@
                                 </tree>
                             </field>
                         </page>
+                        <page name="relationship_ids" string="Relationships">
+                            <field name="relationship_ids">
+                                <tree>
+                                    <field name="family_id"/>
+                                    <field name="partner_2" string="Partner"/>
+                                    <field name="custody"/>
+                                    <field name="financial_responsability"/>
+                                    <field name="relationship_type_id"/>
+                                </tree>
+                            </field>
+                        </page>
                     </notebook>
                 </sheet>
 

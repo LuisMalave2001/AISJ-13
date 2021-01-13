@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <record model="ir.ui.view" id="view_res_partner_school_finance_form_view">
+    <record id="view_res_partner_school_finance_form_view" model="ir.ui.view">
         <field name="name">view.res.partner.school.finance.form.view</field>
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form" />
@@ -103,17 +103,9 @@
                         <!--                     <group invisible="1">  -->
                         <field name="id" invisible="1" />
                         <field name="financial_res_ids" widget="many2many_checkboxes" domain='["&amp;", "|", ("id", "=", id), ("id", "in", member_ids), ("person_type", "!=", "student")]' />
-                        <field name="invoice_address_id" domain='["&amp;", "|", ("id", "=", id), ("id", "in", member_ids), ("person_type", "!=", "student")]' attrs="{'required': [('is_family','=',True)]}"/>
+                        <field name="invoice_address_id" domain="['&amp;', '|', ('id', '=', id), ('id', 'in', member_ids), ('person_type', '!=', 'student')]" attrs="{'required': [('is_family','=',True)]}"/>
                     </group>
-                    <group attrs="{'invisible': ['|', ('person_type', '!=', 'student'), ('is_company', '=', True)]}">
-                        <field name="family_res_finance_ids" domain='[("family_id", "in", family_ids)]'>
-                            <tree editable="bottom">
-                                <field name="family_id" />
-                                <field name="category_id" />
-                                <field name="percent" />
-                            </tree>
-                        </field>
-                    </group>
+
                 </page>
             </notebook>
         </field>

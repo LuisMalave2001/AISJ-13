@@ -78,6 +78,7 @@ class Application(models.Model):
     birth_city = fields.Char("Birth City", related="partner_id.city")
     gender = fields.Many2one("adm.gender", string="Gender", related="partner_id.gender", inverse="_set_gender")
     status_history_ids = fields.One2many('adm.application.history.status', 'application_id', string="Status history")
+    family_id = fields.Many2one('res.partner', domain="[('is_family', '=', True)]", required=True)
 
     responsible_user_id = fields.Many2one('res.users')
 
@@ -112,6 +113,7 @@ class Application(models.Model):
     current_school_address = fields.Char(string="Current School Address")
 
     grade_level = fields.Many2one("school_base.grade_level", string="Grade Level", domain=[('active_admissions', '=', True)])
+    grade_level_type = fields.Selection(related="grade_level.user_type_id.type")
     grade_level_inquiry = fields.Many2one(string="GradeLevel", related="inquiry_id.grade_level_id")
     school_year = fields.Many2one("school_base.school_year", string="School Year")
 
@@ -142,17 +144,17 @@ class Application(models.Model):
     relationship_ids = fields.One2many(string="Relationship",
                                        related="partner_id.relationship_ids",
                                        readonly=False)
-    custodial_relationship_ids = fields.Many2many('adm.relationship',
+    custodial_relationship_ids = fields.Many2many('school_base.relationship',
                                                   string="Custodials",
                                                   compute="compute_custodials",
                                                   store=False,
                                                   )
 
-    @api.depends('relationship_ids', 'relationship_ids.custodial_rights')
+    @api.depends('relationship_ids', 'relationship_ids.custody')
     def compute_custodials(self):
         for application_id in self:
             application_id.custodial_relationship_ids = (
-                application_id.relationship_ids.filtered('custodial_rights'))
+                application_id.relationship_ids.filtered('custody'))
 
     # Documentation
     letter_of_motivation_id = fields.Many2one("ir.attachment",
@@ -229,9 +231,6 @@ class Application(models.Model):
 
     status_type = fields.Selection(string="Status Type", related="status_id.type_id")
     forcing = False
-
-    family_id = fields.Many2one(string="Family",
-                                related="partner_id.parent_id")
 
     # QUESTION CUSTOMIZED PREESCOLAR
     applying_semester = fields.Selection([

@@ -37,7 +37,7 @@
             </p>
             <div class="row" data-adm-model-fields="1">
                 <div class="col-12 col-md-6">
-                    <div class="custom-control custom-switch">
+                    <div class="custom-control">
                         <label>Grant AISJ Photo Permission?<span class="text-danger"> *</span></label>
                         <div class="form-check">
                             <input class="form-check-input" type="radio"
@@ -431,10 +431,291 @@
                     </div>
                 </section>
                 <section t-if="application_id.grade_level.user_type_id.type == 'elementary'" class="card mb-2">
-<!--                <section class="card mb-2">-->
+                    <!--                <section class="card mb-2">-->
                     <div class="card-body">
                         <div class="row">
-                            <h1>Hola</h1>
+                            <div class="col-12 col-md-6">
+                                <div class="custom-control">
+                                    <label>Has your child been previously enrolled in a daycare/preschool
+                                        program?</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio"
+                                               data-adm-field="c_aisj_elementary_q1"
+                                               value="yes"
+                                               t-att-checked="application_id.c_aisj_elementary_q1"
+                                               id="c_aisj_elementary_q1_yes"
+                                               name="c_aisj_elementary_q1"/>
+                                        <label class="for-check-label" for="c_aisj_elementary_q1_yes">Yes</label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio"
+                                               data-adm-field="c_aisj_elementary_q1"
+                                               value=""
+                                               t-att-checked="not application_id.c_aisj_elementary_q1"
+                                               id="c_aisj_elementary_q1_no"
+                                               name="c_aisj_elementary_q1"/>
+                                        <label class="for-check-label" for="c_aisj_elementary_q1_no">No</label>
+                                    </div>
+                                </div>
+                                <div class="form-group row js_show_when_input"
+                                     data-target="input[name='c_aisj_elementary_q1']"
+                                     data-is-value="yes">
+                                    <label for="staticEmail" class="col-sm-2 col-form-label">Age:</label>
+                                    <div class="col-sm-10">
+                                        <select required="required" class="form-control"
+                                                name="c_aisj_elementary_q1_age"
+                                                data-adm-field="c_aisj_elementary_q1_age"
+                                                data-adm-field-type="INTEGER">
+                                            <option value="0" selected="selected" disabled="disabled">
+                                                -Select a age-
+                                            </option>
+                                            <t t-foreach="range(1, 8)" t-as="age">
+                                                <option t-att-selected="application_id.c_aisj_elementary_q1_age == age"
+                                                        t-att-value="age">
+                                                    <t t-esc="age"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row js_show_when_input"
+                                     data-target="input[name='c_aisj_elementary_q1']"
+                                     data-is-value="yes">
+                                    <label for="staticEmail" class="col-sm-2 col-form-label">Country:</label>
+                                    <div class="col-sm-10">
+                                        <select required="required" type="text"
+                                                id="country_id" name="c_aisj_elementary_q1_country_id" placeholder="Country"
+                                                data-adm-field="c_aisj_elementary_q1_country_id" data-adm-field-type="INTEGER"
+                                                class="form-control">
+                                            <option value="-1" selected="selected" disabled="disabled">
+                                                -Select a country-
+                                            </option>
+                                            <t t-foreach="country_ids" t-as="country">
+                                                <option t-att-selected="application_id.c_aisj_elementary_q1_country_id.id == country.id"
+                                                        t-att-value="country.id">
+                                                    <t t-esc="country.name"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <div class="custom-control">
+                                    <label>Is your child toilet trained?</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio"
+                                               data-adm-field="c_aisj_elementary_q2"
+                                               value="yes"
+                                               t-att-checked="application_id.c_aisj_elementary_q2"
+                                               id="c_aisj_elementary_q2_yes"
+                                               name="c_aisj_elementary_q2"/>
+                                        <label class="for-check-label" for="c_aisj_elementary_q2_yes">Yes</label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio"
+                                               data-adm-field="c_aisj_elementary_q2"
+                                               value=""
+                                               t-att-checked="not application_id.c_aisj_elementary_q2"
+                                               id="c_aisj_elementary_q2_no"
+                                               name="c_aisj_elementary_q2"/>
+                                        <label class="for-check-label" for="c_aisj_elementary_q2_no">No</label>
+                                    </div>
+                                </div>
+                                <div class="form-group row js_show_when_input"
+                                     data-target="input[name='c_aisj_elementary_q2']"
+                                     data-is-value="yes">
+                                    <label for="staticEmail" class="col-sm-2 col-form-label">Age:</label>
+                                    <div class="col-sm-10">
+                                        <select required="required" class="form-control"
+                                                name="c_aisj_elementary_q2_age"
+                                                data-adm-field="c_aisj_elementary_q2_age"
+                                                data-adm-field-type="INTEGER">
+                                            <option value="0" selected="selected" disabled="disabled">
+                                                -Select a age-
+                                            </option>
+                                            <t t-foreach="range(1, 8)" t-as="age">
+                                                <option t-att-selected="application_id.c_aisj_elementary_q2_age == age"
+                                                        t-att-value="age">
+                                                    <t t-esc="age"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <div class="custom-control">
+                                    <label>Does your child communicate using words/phrases?</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio"
+                                               data-adm-field="c_aisj_elementary_q3"
+                                               value="yes"
+                                               t-att-checked="application_id.c_aisj_elementary_q3"
+                                               id="c_aisj_elementary_q3_yes"
+                                               name="c_aisj_elementary_q3"/>
+                                        <label class="for-check-label" for="c_aisj_elementary_q3_yes">Yes</label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio"
+                                               data-adm-field="c_aisj_elementary_q3"
+                                               value=""
+                                               t-att-checked="not application_id.c_aisj_elementary_q3"
+                                               id="c_aisj_elementary_q3_no"
+                                               name="c_aisj_elementary_q3"/>
+                                        <label class="for-check-label" for="c_aisj_elementary_q3_no">No</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6 form-group">
+                                <label>Is your child able to separate from you easily?</label>
+                                <select class="form-control" data-adm-field="c_aisj_elementary_q4">
+                                    <option disabled="disabled" selected="disabled" value="">-Select a option-</option>
+                                    <t t-foreach="elementary_selection_questions_vals" t-as="elementary_selection_questions_val">
+                                        <option t-att-selected="application_id.c_aisj_elementary_q4 == elementary_selection_questions_val['value']"
+                                                t-att-value="elementary_selection_questions_val['value']">
+                                            <t t-esc="elementary_selection_questions_val['name']"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6 form-group">
+                                <label>Does your child express appropriate emotions depending on his</label>
+                                <select class="form-control" data-adm-field="c_aisj_elementary_q5">
+                                    <option disabled="disabled" selected="disabled" value="">-Select a option-</option>
+                                    <t t-foreach="elementary_selection_questions_vals" t-as="elementary_selection_questions_val">
+                                        <option t-att-selected="application_id.c_aisj_elementary_q5 == elementary_selection_questions_val['value']"
+                                                t-att-value="elementary_selection_questions_val['value']">
+                                            <t t-esc="elementary_selection_questions_val['name']"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6 form-group">
+                                <label>Does your child make eye contact while speaking or playing with you?</label>
+                                <select class="form-control" data-adm-field="c_aisj_elementary_q6">
+                                    <option disabled="disabled" selected="disabled" value="">-Select a option-</option>
+                                    <t t-foreach="elementary_selection_questions_vals" t-as="elementary_selection_questions_val">
+                                        <option t-att-selected="application_id.c_aisj_elementary_q6 == elementary_selection_questions_val['value']"
+                                                t-att-value="elementary_selection_questions_val['value']">
+                                            <t t-esc="elementary_selection_questions_val['name']"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6 form-group">
+                                <label>Does your child interact and engage with other children?</label>
+                                <select class="form-control" data-adm-field="c_aisj_elementary_q7">
+                                    <option disabled="disabled" selected="disabled" value="">-Select a option-</option>
+                                    <t t-foreach="elementary_selection_questions_vals" t-as="elementary_selection_questions_val">
+                                        <option t-att-selected="application_id.c_aisj_elementary_q7 == elementary_selection_questions_val['value']"
+                                                t-att-value="elementary_selection_questions_val['value']">
+                                            <t t-esc="elementary_selection_questions_val['name']"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6 form-group">
+                                <label>Does your child interact and engage with familiar adults?</label>
+                                <select class="form-control" data-adm-field="c_aisj_elementary_q8">
+                                    <option disabled="disabled" selected="disabled" value="">-Select a option-</option>
+                                    <t t-foreach="elementary_selection_questions_vals" t-as="elementary_selection_questions_val">
+                                        <option t-att-selected="application_id.c_aisj_elementary_q8 == elementary_selection_questions_val['value']"
+                                                t-att-value="elementary_selection_questions_val['value']">
+                                            <t t-esc="elementary_selection_questions_val['name']"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6 form-group">
+                                <label>Does your child eat regular meals and snack independently?</label>
+                                <select class="form-control" data-adm-field="c_aisj_elementary_q9">
+                                    <option disabled="disabled" selected="disabled" value="">-Select a option-</option>
+                                    <t t-foreach="elementary_selection_questions_vals" t-as="elementary_selection_questions_val">
+                                        <option t-att-selected="application_id.c_aisj_elementary_q9 == elementary_selection_questions_val['value']"
+                                                t-att-value="elementary_selection_questions_val['value']">
+                                            <t t-esc="elementary_selection_questions_val['name']"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6 form-group">
+                                <label>Does your child sleep in regular routines (naps, nighttime)?</label>
+                                <select class="form-control" data-adm-field="c_aisj_elementary_q10">
+                                    <option disabled="disabled" selected="disabled" value="">-Select a option-</option>
+                                    <t t-foreach="elementary_selection_questions_vals" t-as="elementary_selection_questions_val">
+                                        <option t-att-selected="application_id.c_aisj_elementary_q10 == elementary_selection_questions_val['value']"
+                                                t-att-value="elementary_selection_questions_val['value']">
+                                            <t t-esc="elementary_selection_questions_val['name']"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6 form-group">
+                                <label>Does your child show interest in a variety of activities?</label>
+                                <select class="form-control" data-adm-field="c_aisj_elementary_q11">
+                                    <option disabled="disabled" selected="disabled" value="">-Select a option-</option>
+                                    <t t-foreach="elementary_selection_questions_vals" t-as="elementary_selection_questions_val">
+                                        <option t-att-selected="application_id.c_aisj_elementary_q11 == elementary_selection_questions_val['value']"
+                                                t-att-value="elementary_selection_questions_val['value']">
+                                            <t t-esc="elementary_selection_questions_val['name']"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6 form-group">
+                                <label>Does your child focus on one activity for more than 10 minutes (not including TV)?</label>
+                                <select class="form-control" data-adm-field="c_aisj_elementary_q12">
+                                    <option disabled="disabled" selected="disabled" value="">-Select a option-</option>
+                                    <t t-foreach="elementary_selection_questions_vals" t-as="elementary_selection_questions_val">
+                                        <option t-att-selected="application_id.c_aisj_elementary_q12 == elementary_selection_questions_val['value']"
+                                                t-att-value="elementary_selection_questions_val['value']">
+                                            <t t-esc="elementary_selection_questions_val['name']"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6 form-group">
+                                <label>Does your child follow simple instructions?</label>
+                                <select class="form-control" data-adm-field="c_aisj_elementary_q13">
+                                    <option disabled="disabled" selected="disabled" value="">-Select a option-</option>
+                                    <t t-foreach="elementary_selection_questions_vals" t-as="elementary_selection_questions_val">
+                                        <option t-att-selected="application_id.c_aisj_elementary_q13 == elementary_selection_questions_val['value']"
+                                                t-att-value="elementary_selection_questions_val['value']">
+                                            <t t-esc="elementary_selection_questions_val['name']"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md-6 form-group">
+                                <label>Does your child follow rules (at home, or at school)?</label>
+                                <select class="form-control" data-adm-field="c_aisj_elementary_q14">
+                                    <option disabled="disabled" selected="disabled" value="">-Select a option-</option>
+                                    <t t-foreach="elementary_selection_questions_vals" t-as="elementary_selection_questions_val">
+                                        <option t-att-selected="application_id.c_aisj_elementary_q14 == elementary_selection_questions_val['value']"
+                                                t-att-value="elementary_selection_questions_val['value']">
+                                            <t t-esc="elementary_selection_questions_val['name']"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+
                         </div>
                     </div>
                 </section>

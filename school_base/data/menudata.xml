@@ -155,10 +155,8 @@
               parent="school_configuration_menu_configurations" name="Marital Status"
               action="action_school_configuration_marital_status"/>
       
-    <menuitem id="school_configuration_menu_settings" name="Settings" parent="school_configuration_menu"/>
-
     <menuitem id="school_configuration_menu_grade_level_types" action="action_school_configuration_grade_level_types"
-              name="Grade level types" parent="school_configuration_menu_settings"/>
+              name="Grade level types" parent="school_configuration_menu_configurations"/>
 
     <menuitem id="adm_menu_gender"
               parent="school_configuration_menu_configurations" name="Gender"
