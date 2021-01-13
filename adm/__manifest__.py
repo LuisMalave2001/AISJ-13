@@ -35,7 +35,7 @@
              'views/adm_siblings_views.xml',
              'views/assets.xml',
              'views/res_config_settings_views.xml',
-             'views/res_partner_views.xml',
+             #'views/res_partner_views.xml',
              'views/res_user_views.xml',
              'views/school_base_models_views.xml',
 
