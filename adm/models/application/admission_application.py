@@ -64,6 +64,9 @@ class Application(models.Model):
         status_ids = self.env['adm.application.status'].search([])
         return status_ids
 
+    def default_family_id(self):
+        return self.responsible_user_id.family_ids[0]
+
     # Admission Information
     preferred_degree_program = fields.Many2one("adm.degree_program", string="Preferred Degree Program")
 
@@ -78,7 +81,7 @@ class Application(models.Model):
     birth_city = fields.Char("Birth City", related="partner_id.city")
     gender = fields.Many2one("adm.gender", string="Gender", related="partner_id.gender", inverse="_set_gender")
     status_history_ids = fields.One2many('adm.application.history.status', 'application_id', string="Status history")
-    family_id = fields.Many2one('res.partner', domain="[('is_family', '=', True)]", required=True)
+    family_id = fields.Many2one('res.partner', domain="[('is_family', '=', True)]", required=True, default=default_family_id)
 
     responsible_user_id = fields.Many2one('res.users')
 
