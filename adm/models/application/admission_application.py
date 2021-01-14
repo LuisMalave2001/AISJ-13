@@ -78,9 +78,9 @@ class Application(models.Model):
     birth_city = fields.Char("Birth City", related="partner_id.city")
     gender = fields.Many2one("adm.gender", string="Gender", related="partner_id.gender", inverse="_set_gender")
     status_history_ids = fields.One2many('adm.application.history.status', 'application_id', string="Status history")
-    family_id = fields.Many2one('res.partner', domain="[('is_family', '=', True)]", required=True,)
+    family_id = fields.Many2one('res.partner', domain="[('is_family', '=', True)]", required=True)
 
-    responsible_user_id = fields.Many2one('res.users')
+    responsible_user_id = fields.Many2one('res.users', required=True)
 
     responsible_user_kanban_ids = fields.Many2many(
         'res.users',
@@ -93,9 +93,19 @@ class Application(models.Model):
 
     assigned_user_id = fields.Many2one('res.users')
 
+    @api.model
+    def default_get(self, fields):
+        res = super().default_get(fields)
+        a = 0
+        return res
+
     def _set_gender(self):
         for application_id in self:
             application_id.partner_id.gender = self.gender
+
+    def _set_family_id(self):
+        for application_id in self:
+            application_id.family_id = application_id.family_id
 
     father_name = fields.Char("Father name")
     mother_name = fields.Char("Mother name")
