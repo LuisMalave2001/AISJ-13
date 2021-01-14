@@ -3,7 +3,7 @@
 from odoo import models, fields, api, _
 
 
-class AdmissionsSettings(models.TransientModel):
+class ResConfigSettings(models.TransientModel):
     """  Settings for school base module """
     _inherit = "res.config.settings"
 
@@ -26,7 +26,7 @@ class AdmissionsSettings(models.TransientModel):
 
     @api.model
     def get_values(self):
-        res = super(AdmissionsSettings, self).get_values()
+        res = super(ResConfigSettings, self).get_values()
 
         config_parameter = self.env['ir.config_parameter'].sudo()
         adm_application_json_field_str = config_parameter.get_param(
@@ -60,6 +60,7 @@ class AdmissionsSettings(models.TransientModel):
         return res
 
     def set_values(self):
+        super(ResConfigSettings, self).set_values()
         for settings in self:
             config_parameter = self.env['ir.config_parameter'].sudo()
             config_parameter.set_param(
