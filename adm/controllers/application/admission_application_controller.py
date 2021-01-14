@@ -91,7 +91,7 @@ class ApplicationController(AdmissionController):
 
         parent = env.user
 
-        family_id = int(result.get("family_id", False) or False)
+        family_id = int(result.pop("family_id", False) or False)
         family = env['res.partner'].browse(family_id)
 
         # family = parent.family_ids and parent.family_ids[0]
@@ -104,6 +104,7 @@ class ApplicationController(AdmissionController):
                 'member_ids': [(4, parent.id, False)]
                 })
             family_id = family.id
+            # result["family_id"] = family_id
             parent.write({
                 'family_ids': [(4, family.id, False)]
                 })
