@@ -105,7 +105,7 @@
                                         <form t-attf-action="/admission/applications/create" method="post"
                                               enctype="multipart/form-data">
                                             <div class="container">
-                                                <input type="hidden" name="family_id" t-att-value="user_id.partner_id.family_ids or user_id.partner_id.family_ids[0].id"/>
+                                                <input type="hidden" name="family_id" t-att-value="user_id.partner_id.family_ids and user_id.partner_id.family_ids[0].id"/>
                                                 <section class="container align-items-center mt-3">
                                                     <div class="row">
                                                         <div class="col-8 offset-2 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
