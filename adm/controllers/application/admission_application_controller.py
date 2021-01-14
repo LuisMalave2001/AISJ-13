@@ -12,6 +12,7 @@ from odoo.addons.adm.controllers.admission_controller import \
     AdmissionController
 
 _logger = logging.getLogger(__name__)
+from odoo import api, SUPERUSER_ID
 
 
 class ApplicationController(AdmissionController):
@@ -48,14 +49,16 @@ class ApplicationController(AdmissionController):
             })
 
     @http.route("/admission/applications/create", auth="public",
-
                 methods=["POST"], website=True, csrf=False)
     def info_create_post(self, **params):
-        PartnerEnv = http.request.env["res.partner"]
-        ApplicationEnv = http.request.env["adm.application"]
 
-        field_ids = http.request.env.ref(
-            "adm.model_adm_application").sudo().field_id
+        env = api.Environment(request.env.cr, SUPERUSER_ID,
+                              request.env.context)
+
+        PartnerEnv = env["res.partner"]
+        ApplicationEnv = env["adm.application"]
+
+        field_ids = env.ref("adm.model_adm_application").field_id
         fields = [field_id.name for field_id in field_ids]
         keys = params.keys() & fields
         result = {k: params[k] for k in keys}
@@ -81,27 +84,32 @@ class ApplicationController(AdmissionController):
 
         for key in result.keys():
             if key in many2one_fields:
-                result[key] = int(result[key])
+                result[key] = int(result.get(key, False) or False)
                 if result[key] == -1:
                     result[key] = False
                     pass
 
-        parent = http.request.env.user.partner_id.sudo()
-        family = parent.family_ids and parent.family_ids[0]
+        parent = env.user
+
+        family_id = int(result.get("family_id", False) or False)
+        family = env['res.partner'].browse(family_id)
+
+        # family = parent.family_ids and parent.family_ids[0]
 
         if not family:
-            family = PartnerEnv.sudo().create({
+            family = PartnerEnv.create({
                 'name': 'Family of %s' % parent.name,
                 'is_family': True,
                 'is_company': True,
                 'member_ids': [(4, parent.id, False)]
                 })
+            family_id = family.id
             parent.write({
                 'family_ids': [(4, family.id, False)]
                 })
 
         # noinspection PyUnresolvedReferences
-        partner = PartnerEnv.sudo().create({
+        partner = PartnerEnv.create({
             "first_name": result.get("first_name"),
             "middle_name": result.get("middle_name"),
             "last_name": result.get("last_name"),
@@ -114,17 +122,19 @@ class ApplicationController(AdmissionController):
         family.write({
             'member_ids': [(4, partner.id, False)]
             })
-        application = ApplicationEnv.sudo().create({
+        application = ApplicationEnv.create({
             "first_name": result.get("first_name"),
             "middle_name": result.get("middle_name"),
             "last_name": result.get("last_name"),
+            "family_id": family_id,
             "partner_id": partner.id,
-            "responsible_user_id": request.env.user.id
+            "responsible_user_id": request.env.user.id,
             })
         result["relationship_ids"] = [(0, 0, {
-            "partner_2": parent.id
+            "partner_2": parent.id,
+            "family_id": family_id,
             })]
-        application.sudo().write(result)
+        application.write(result)
 
         return (http.request
                 .redirect("/admission/applications/%s" % application.id))

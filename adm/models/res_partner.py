@@ -21,7 +21,7 @@ class ResPartnerExtended(models.Model):
     school_grade = fields.Char("School grade")
     school = fields.Char("Current school")
 
-    relationship_ids = fields.One2many("adm.relationship", "partner_1", string="Relationships")
+    # relationship_ids = fields.One2many("adm.relationship", "partner_1", string="Relationships")
     house_address_ids = fields.One2many("adm.house_address", "family_id", string="House Addresses")
 
     medical_allergies_ids = fields.One2many("adm.medical_allergy", "partner_id", string="Medical Allergies")

@@ -15,7 +15,7 @@
     # /ir_module_category_data.xml
     # for the full list
     'category': 'Admission',
-    'version': '0.2',
+    'version': '0.3',
 
     # any module necessary for this one to work correctly
     'depends': ['base', 'school_base', 'mail', 'website', 'contacts'],
@@ -31,11 +31,10 @@
              'views/adm_inquiry_views.xml',
              'views/adm_language_level_views.xml',
              'views/adm_language_views.xml',
-             'views/adm_relationship_views.xml',
              'views/adm_siblings_views.xml',
              'views/assets.xml',
              'views/res_config_settings_views.xml',
-             'views/res_partner_views.xml',
+             #'views/res_partner_views.xml',
              'views/res_user_views.xml',
              'views/school_base_models_views.xml',
 

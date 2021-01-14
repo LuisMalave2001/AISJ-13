@@ -8,3 +8,6 @@ class WebserviceConfigurator(models.Model):
 
     name = fields.Char("Name")
     panel_configuration = fields.Many2one("import_to_facts.configuration_panel", string="Configuration Panel")
+    domain = fields.Char("Domain")
+    label = fields.Char("Label")
+    model_id = fields.Many2one('ir.model', string='Model')

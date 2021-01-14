@@ -21,6 +21,7 @@
                 <field name="field_id"/>
                 <field name="alias_field"/>
                 <field name="parent_id"/>
+                <field name="domain"/>
                 <field name="fields" widget="many2many_tags"/>
             </tree>
         </field>

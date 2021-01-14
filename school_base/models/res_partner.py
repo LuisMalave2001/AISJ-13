@@ -25,13 +25,12 @@ SELECT_STATUS_TYPES = [
     ]
 
 SELECT_REENROLLMENT_STATUS = [
-    ("admissions", "Admissions"),
-    ("enrolled", "Enrolled"),
-    ("graduate", "Graduate"),
-    ("inactive", "Inactive"),
-    ("pre-enrolled", "Pre-Enrolled"),
+    ("open", "Open"),
+    ("finished", "Finished"),
     ("withdrawn", "Withdrawn"),
-    ]
+    ("rejected", "Rejected"),
+    ("blocked", "Blocked"),
+]
 
 
 class Contact(models.Model):
@@ -53,14 +52,11 @@ class Contact(models.Model):
 
     def _retrieve_allow_name_edit_from_config(self):
         self.allow_edit_student_name = bool(
-            self.env["ir.config_parameter"].sudo().get_param(
-                "school_base.allow_edit_student_name", False))
+            self.env["ir.config_parameter"].sudo().get_param("school_base.allow_edit_student_name", False))
         self.allow_edit_parent_name = bool(
-            self.env["ir.config_parameter"].sudo().get_param(
-                "school_base.allow_edit_parent_name", False))
+            self.env["ir.config_parameter"].sudo().get_param("school_base.allow_edit_parent_name", False))
         self.allow_edit_person_name = bool(
-            self.env["ir.config_parameter"].sudo().get_param(
-                "school_base.allow_edit_person_name", False))
+            self.env["ir.config_parameter"].sudo().get_param("school_base.allow_edit_person_name", False))
 
     @api.depends("allow_edit_student_name",
                  "allow_edit_parent_name",
@@ -113,24 +109,51 @@ class Contact(models.Model):
     last_name = fields.Char("Last Name")
 
     date_of_birth = fields.Date('Date of birth')
+    suffix = fields.Char("Suffix")
+    facts_nickname = fields.Char("Facts Nickname")
+    ethnicity = fields.Char("Ethnicity")
+    facts_citizenship = fields.Char("Facts Citizenship")
+    primary_language = fields.Char("Primary Language")
+    birth_city = fields.Char("Birth City")
+    birth_state = fields.Char("Birth State")
+    race = fields.Char("Race")
+    gender = fields.Many2one("school_base.gender", string="Gender")
+
+    date_of_birth = fields.Date("date_of_birth")
+
+    medical_allergies_ids = fields.One2many("school_base.medical_allergy", "partner_id", string="Medical Allergies")
+    medical_conditions_ids = fields.One2many("school_base.medical_condition", "partner_id", string="Medical conditions")
+    medical_medications_ids = fields.One2many("school_base.medical_medication", "partner_id",
+                                              string="Medical Medication")
+
+    citizenship = fields.Many2one("res.country", string="Citizenship")
+    identification = fields.Char("ID number")
+    salutation = fields.Char("Salutation")
+    # marital_status = fields.Selection(
+    #     [("married", "Married"), ("single", "Single"), ("divorced", "Divorced"), ("widowed", "Widowed")],
+    #     string="Marital Status")
+
+    marital_status = fields.Many2one('school_base.marital_status', string='Marital status')
+    occupation = fields.Char("Occupation")
+    title = fields.Char("Title")
+    relationship_ids = fields.One2many("school_base.relationship", "partner_1", string="Relationships")
+
+    relationship_members_ids = fields.One2many("school_base.relationship", "family_id", string="Relationships Members",
+                                               readonly=True)
 
     # Fields for current student status, grade leve, status, etc...
-    school_code_id = fields.Many2one('school_base.school_code',
-                                     string='Current school code')
-    grade_level_id = fields.Many2one("school_base.grade_level",
-                                     string="Grade Level")
-    student_status = fields.Char("Student status (Deprecated)",
-                                 help="(This field is deprecated)")
-    student_status_id = fields.Selection(SELECT_STATUS_TYPES,
-                                         string="Student status")
+    school_code_id = fields.Many2one('school_base.school_code', string='Current school code')
+    grade_level_id = fields.Many2one("school_base.grade_level", string="Grade Level")
+    student_status = fields.Char("Student status (Deprecated)", help="(This field is deprecated)")
+    # student_status_id = fields.Many2one("school_base.enrollment.status", string="Student status")
 
     # Fields for next student status, grade leve, status, etc...
-    next_school_code_id = fields.Many2one('school_base.school_code',
-                                          string='Current school code')
-    next_grade_level_id = fields.Many2one("school_base.grade_level",
-                                          string="Next grade level")
-    student_next_status_id = fields.Selection(SELECT_STATUS_TYPES,
-                                              string="Student next status")
+    next_school_code_id = fields.Many2one('school_base.school_code', string='Current school code')
+    next_grade_level_id = fields.Many2one("school_base.grade_level", string="Next grade level")
+
+    student_next_status_id = fields.Selection(SELECT_STATUS_TYPES, string="Student next status")
+    student_status_id = fields.Selection(SELECT_STATUS_TYPES, string="Student next status")
+    # student_next_status_id2 = fields.Many2one("school_base.enrollment.status", string="Student next status")
 
     # School information
     homeroom = fields.Char("Homeroom")
@@ -152,17 +175,19 @@ class Contact(models.Model):
                                                       "Reenollment school "
                                                       "year"))
 
+    placement_id = fields.Many2one('school_base.placement', string=_("Placement"))
+
     # Facts metadata
     facts_id_int = fields.Integer("Facts id (Integer)",
                                   compute="_converts_facts_id_to_int",
                                   store=True, readonly=True)
     facts_id = fields.Char("Facts id")
 
-     # Facts UDID
+    # Facts UDID
     facts_udid_int = fields.Integer("Facts UDID (Integer)", compute="_converts_facts_udid_id_to_int", store=True,
                                     readonly=True)
     facts_udid = fields.Char("Facts UDID")
-    
+
     # Healthcare
     allergy_ids = fields.One2many("school_base.allergy", "partner_id",
                                   string="Allergies")
@@ -172,9 +197,7 @@ class Contact(models.Model):
     @api.depends("facts_id")
     def _converts_facts_id_to_int(self):
         for partner_id in self:
-            partner_id.facts_id_int = int(
-                partner_id.facts_id) if partner_id.facts_id and \
-                                        partner_id.facts_id.isdigit() else 0
+            partner_id.facts_id_int = int(partner_id.facts_id) if partner_id.facts_id and partner_id.facts_id.isdigit() else 0
 
     @api.constrains("facts_id")
     def _check_facts_id(self):
@@ -190,6 +213,24 @@ class Contact(models.Model):
                     raise ValidationError(
                         "Another contact has the same facts id!")
                     
+    @api.depends("facts_udid")
+    def _converts_facts_udid_id_to_int(self):
+        for partner_id in self:
+            partner_id.facts_udid_int = int(
+                partner_id.facts_udid) if partner_id.facts_udid and partner_id.facts_udid.isdigit() else 0
+
+    @api.constrains("facts_udid")
+    def _check_facts_udid_id(self):
+        for partner_id in self:
+            if partner_id.facts_udid:
+
+                if not partner_id.facts_udid.isdigit():
+                    raise ValidationError("Facts id needs to be an number")
+
+                should_be_unique = self.search_count([("facts_id", "=", partner_id.facts_udid)])
+                if should_be_unique > 1:
+                    raise ValidationError("Another contact has the same facts id!")
+
     @api.depends("facts_udid")
     def _converts_facts_udid_id_to_int(self):
         for partner_id in self:
@@ -338,6 +379,12 @@ class Contact(models.Model):
         return super().write(values)
 
     # Helpers methods
+    # devuelve familias de un partner
+    def get_families(self):
+        PartnerEnv = self.env["res.partner"].sudo()
+        return PartnerEnv.search([("is_family", "=", True)]).filtered(
+            lambda app: self.id in app.member_ids.ids)
+      
     def recompute_status_id(self):
         for partner_id in self.filtered('student_status'):
             student_status = partner_id.student_status

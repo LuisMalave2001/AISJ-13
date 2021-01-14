@@ -18,8 +18,8 @@ class AdmApplication(models.Model):
     # I know we can use relationship_ids field, but, this can make the things really
     # complicated.
     # So, a simple silution is create a specific field for then
-    guardian_relationship1_id = fields.Many2one('adm.relationship')
-    guardian_relationship2_id = fields.Many2one('adm.relationship')
+    guardian_relationship1_id = fields.Many2one('school_base.relationship')
+    guardian_relationship2_id = fields.Many2one('school_base.relationship')
 
     guardian1_partner_id = fields.Many2one('res.partner')
     guardian2_partner_id = fields.Many2one('res.partner')
@@ -141,6 +141,35 @@ class AdmApplication(models.Model):
 
     c_aisj_schools_q1 = fields.Selection([('yes', 'Yes'), ('no', 'No')], string="Has your child applied to The American International School of Jeddah before?")
     c_aisj_schools_q2 = fields.Selection([('yes', 'Yes'), ('no', 'No')], string="Has your child attended The American International School of Jeddah Before?")
+
+    c_aisj_elementary_q1 = fields.Boolean(string="Has your child been previously enrolled in a daycare/preschool program?")
+    c_aisj_elementary_q1_age = fields.Integer(string="Age")
+    c_aisj_elementary_q1_country_id = fields.Many2one('res.country', string="Country")
+
+    c_aisj_elementary_q2 = fields.Boolean(string="Is your child toilet trained?")
+    c_aisj_elementary_q2_age = fields.Integer(string="At what age did your child toilet train?")
+
+    c_aisj_elementary_q3 = fields.Boolean(string="Does your child communicate using words/phrases?")
+
+    ELEMENTARY_SELECTION_QUESTIONS = [
+        ('always', "Always"),
+        ('most_of_the_time', "Most of the time"),
+        ('sometimes', "Sometimes"),
+        ('rarely', "Rarely"),
+        ('never', "Never"),
+        ]
+
+    c_aisj_elementary_q4 = fields.Selection(ELEMENTARY_SELECTION_QUESTIONS, string="Is your child able to separate from you easily?")
+    c_aisj_elementary_q5 = fields.Selection(ELEMENTARY_SELECTION_QUESTIONS, string="Does your child express appropriate emotions depending on his/her mood?")
+    c_aisj_elementary_q6 = fields.Selection(ELEMENTARY_SELECTION_QUESTIONS, string="Does your child make eye contact while speaking or playing with you?")
+    c_aisj_elementary_q7 = fields.Selection(ELEMENTARY_SELECTION_QUESTIONS, string="Does your child interact and engage with other children?")
+    c_aisj_elementary_q8 = fields.Selection(ELEMENTARY_SELECTION_QUESTIONS, string="Does your child interact and engage with familiar adults?")
+    c_aisj_elementary_q9 = fields.Selection(ELEMENTARY_SELECTION_QUESTIONS, string="Does your child eat regular meals and snack independently?")
+    c_aisj_elementary_q10 = fields.Selection(ELEMENTARY_SELECTION_QUESTIONS, string="Does your child sleep in regular routines (naps, nighttime)?")
+    c_aisj_elementary_q11 = fields.Selection(ELEMENTARY_SELECTION_QUESTIONS, string="Does your child show interest in a variety of activities?")
+    c_aisj_elementary_q12 = fields.Selection(ELEMENTARY_SELECTION_QUESTIONS, string="Does your child focus on one activity for more than 10 minutes (not including TV)?")
+    c_aisj_elementary_q13 = fields.Selection(ELEMENTARY_SELECTION_QUESTIONS, string="Does your child follow simple instructions?")
+    c_aisj_elementary_q14 = fields.Selection(ELEMENTARY_SELECTION_QUESTIONS, string="Does your child follow rules (at home, or at school)?")
 
     grant_aisj_photo_permission = fields.Boolean(string="Grant Aisj photo permission")
 

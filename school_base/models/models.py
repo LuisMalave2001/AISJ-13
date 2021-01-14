@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
-from odoo.addons.school_base.models.res_partner import SELECT_STATUS_TYPES
+
+
+# from odoo.addons.school_base.models.res_partner import SELECT_STATUS_TYPES
 
 
 class SchoolCode(models.Model):
@@ -22,6 +24,8 @@ class SchoolYear(models.Model):
 
     name = fields.Char(string="Name", required=True)
     sequence = fields.Integer(default=1)
+    facts_id = fields.Integer("Facts ID", readonly=True)
+    active_admissions = fields.Boolean('Active admissions')
     school_code_id = fields.Many2one("school_base.school_code", string="School code")
     district_code_id = fields.Many2one(related="school_code_id.district_code_id")
 
@@ -41,6 +45,7 @@ class GradeLevel(models.Model):
     sequence = fields.Integer(default=1)
     school_code_id = fields.Many2one("school_base.school_code", string="School code")
     district_code_id = fields.Many2one(related="school_code_id.district_code_id")
+    user_type_id = fields.Many2one('school_base.grade_level.type')
     capacity = fields.Integer()
 
     @api.onchange('school_code_id')
@@ -48,6 +53,21 @@ class GradeLevel(models.Model):
         self.ensure_one()
         school_code_ids = self.district_code_id.school_code_ids.ids
         return {'domain': {'school_code_id': [('id', 'in', school_code_ids)]}}
+
+
+class SchoolBaseGradeLevelType(models.Model):
+    _name = 'school_base.grade_level.type'
+    _description = "Grade level type"
+
+    type = fields.Selection(
+        [
+            ('elementary', _("Elementary")),
+            ('middle_school', _("Middle school")),
+            ('high_school', _("High school")),
+            ],
+            required=True
+        )
+    name = fields.Char(required=True)
 
 
 class DistrictCode(models.Model):
@@ -65,15 +85,26 @@ class Placement(models.Model):
     """ An informative model for students """
     _name = 'school_base.placement'
     _description = "Placement"
-    name = fields.Char()
+    name = fields.Char(string="Placement", required=True, translate=True)
+    key = fields.Char(string="Key")
 
 
 class WithdrawReason(models.Model):
     """ Why does the student withdraw? """
     _name = 'school_base.withdraw_reason'
     _description = "Withdraw reasons"
+    name = fields.Char(string="WithDraw Reason", required=True, translate=True)
+    key = fields.Char(string="Key")
 
-    name = fields.Char()
+
+class Status(models.Model):
+    """ SubStatus for students """
+    _name = 'school_base.enrollment.status'
+    _description = "Enrollment Status"
+    # status_id = fields.Selection(SELECT_STATUS_TYPES, string='Status')
+    name = fields.Char(string="Name", required=True, translate=True)
+    key = fields.Char(string="Key")
+    note = fields.Char(string="Description")
 
 
 class SubStatus(models.Model):
@@ -81,5 +112,21 @@ class SubStatus(models.Model):
     _name = 'school_base.enrollment.sub_status'
     _description = "Enrollment sub status"
 
-    status_id = fields.Selection(SELECT_STATUS_TYPES, string='Status')
-    name = fields.Char()
+    # status_id = fields.Selection(SELECT_STATUS_TYPES, string='Status')
+    status_id = fields.Selection([('1', '1')], string='Status')
+    name = fields.Char(string="Name", required=True, translate=True)
+    key = fields.Char(string="Key")
+
+
+class MaritalStatus(models.Model):
+    """ An informative model for students """
+    _name = 'school_base.marital_status'
+    _description = "Marital Status"
+    name = fields.Char(string="Name", required=True, translate=True)
+    key = fields.Char(string="Key")
+
+
+class Gender(models.Model):
+    _name = "school_base.gender"
+    name = fields.Char("Gender", required=True, translate=True)
+    key = fields.Char("Key")

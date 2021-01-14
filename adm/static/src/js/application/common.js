@@ -57,7 +57,7 @@ odoo.define('adm.application.common', require => {
             const $el = $(el);
             if ((($el.is(':radio') || $el.is(':checkbox:not([data-adm-field-type=BOOLEAN])')) && !$el.is(':checked'))
                 || $el.prop('disabled')
-                || ($el.is(':file') && (!el.files || !el.files.length ))) {
+                || ($el.is(':file') && (!el.files || !el.files.length))) {
                 continue;
             }
 
@@ -135,7 +135,30 @@ odoo.define('adm.application.common', require => {
         });
     }
 
+    function getValueFromGenericInput($el) {
+        var value = $el;
+        var type = value.attr("type");
+
+        if (type && type.toLowerCase() == 'radio') {
+            value = value.filter(":checked").val();
+        } else {
+            value = value.val();
+        }
+        return value;
+    }
+
     $(document).ready(() => {
+        $('.js_show_when_input').each((i, el) => {
+            const cssQueryTarget = el.dataset.target;
+            const isValue = el.dataset.isValue;
+
+            const toggleShow = () => {
+                const willShow = getValueFromGenericInput($(cssQueryTarget)) == isValue;
+                $(el).toggle(willShow);
+            }
+            $(cssQueryTarget).on('change', toggleShow);
+            toggleShow();
+        });
         $('.form-upload').each((i, el) => {
             const $el = $(el);
             const inputFile = $el.find('input[type=file]');

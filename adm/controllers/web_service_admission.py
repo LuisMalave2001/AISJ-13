@@ -2,13 +2,6 @@ import json
 
 from odoo import http
 
-
-# Se añaden campos:
-# - Siblings
-# - Datos de los hermanos
-# - Horario de partner
-# - Comment en res.parthner
-
 # Updated 2020/12/14
 # By Luis
 # Just some clean up
@@ -18,7 +11,7 @@ class AdmisionController(http.Controller):
     para insertarlas en FACTS
     """
 
-    # csrf: hay que añadir este parametro siu es POST, PUT, etc, para todo
+    # csrf: hay que añadir este parametro si es POST, PUT, etc, para todo
     # menos para GET.
     @http.route("/admission/adm", auth="public", methods=["GET"], cors='*')
     def get_adm_uni(self, **params):

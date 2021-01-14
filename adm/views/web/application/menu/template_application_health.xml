@@ -234,8 +234,7 @@
                                 </t>
                             </section>
                             <button type="button"
-                                    class="add-medical_condition btn btn-secondary d-block ml-auto mr-1 mt-3 mb-3 btn-add"
-                                    id="btn-condition">&#10010;</button>
+                                    class="add-medical_condition btn btn-secondary d-block ml-auto mr-1 mt-3 mb-3 btn-add">&#10010;</button>
                         </div>
 
                         <div class="card mt-2">

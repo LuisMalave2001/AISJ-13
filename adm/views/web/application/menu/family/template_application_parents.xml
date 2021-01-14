@@ -4,7 +4,7 @@
     <template id="template_application_parents_form">
         <div class="container" data-adm-model-fields="1"
              t-att-data-adm-id="id"
-             data-adm-model="adm.relationship">
+             data-adm-model="school_base.relationship">
             <div t-attf-data-adm-field="#{parent_field_name}" data-adm-field-type="MANY2ONE">
                 <t t-if="guardian_relationship_id.id">
                     <input type="hidden" t-att-value="guardian_relationship_id.id"
@@ -18,6 +18,10 @@
                 </t>
                 <div data-adm-field="partner_1" data-adm-field-type="MANY2ONE">
                     <input type="hidden" t-att-value="application_id.partner_id.id"
+                           data-adm-field="id" data-adm-field-type="INTEGER"/>
+                </div>
+                <div data-adm-field="family_id" data-adm-field-type="MANY2ONE">
+                    <input type="hidden" t-att-value="application_id.family_id.id"
                            data-adm-field="id" data-adm-field-type="INTEGER"/>
                 </div>
 
@@ -174,12 +178,15 @@
                         <section class="row">
                             <div class="col-12 col-md-6 form-group">
                                 <label>Relationship to applicant<span class="text-danger"> *</span></label>
-                                <select class="form-control" data-adm-field="relationship_type">
+                                <select class="form-control" data-adm-field="relationship_type_id" data-adm-field-type="INTEGER">
+                                    <option value="-1" selected="selected" disabled="disabled">
+                                        -Select a relation type-
+                                    </option>
                                     <t t-foreach="relationship_types" t-as="relationship_type">
-                                        <t t-if="relationship_type['value'] != 'sibling'">
-                                            <option t-att-selected="guardian_relationship_id.relationship_type == relationship_type['value']"
-                                                    t-att-value="relationship_type['value']">
-                                                <t t-esc="relationship_type['name']"/>
+                                        <t t-if="relationship_type.key != 'sibling'">
+                                            <option t-att-selected="guardian_relationship_id.relationship_type_id == relationship_type"
+                                                    t-att-value="relationship_type.id">
+                                                <t t-esc="relationship_type.name"/>
                                             </option>
                                         </t>
                                     </t>
@@ -193,11 +200,11 @@
                                 <div class="row">
                                     <div class="col-12 col-md-6">
                                         <div class="custom-control custom-switch">
-                                            <input type="checkbox" data-adm-field="custodial_rights"
-                                                   t-att-value="guardian_relationship_id.custodial_rights"
-                                                   t-attf-name="#{parent_field_name}_custodial_rights"
+                                            <input type="checkbox" data-adm-field="custody"
+                                                   t-att-value="guardian_relationship_id.custody"
+                                                   t-attf-name="#{parent_field_name}_custody"
                                                    t-attf-id="#{parent_field_name}_custodial_right"
-                                                   t-att-checked="guardian_relationship_id.custodial_rights"
+                                                   t-att-checked="guardian_relationship_id.custody"
                                                    data-adm-field-type="BOOLEAN"
                                                    class="custom-control-input"/>
                                             <label class="custom-control-label"

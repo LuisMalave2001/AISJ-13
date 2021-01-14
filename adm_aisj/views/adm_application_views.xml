@@ -32,6 +32,29 @@
                         <field name="c_aisj_parent_questionaire_q8" widget="many2many_checkboxes"/>
                         <field name="c_aisj_parent_questionaire_q9"/>
                         <field name="c_aisj_parent_questionaire_q10"/>
+
+                        <field name="grade_level_type" invisible="1"/>
+
+                        <field name="c_aisj_elementary_q1" attrs="{'invisible': [('grade_level_type', '!=', 'elementary')]}"/>
+                        <field name="c_aisj_elementary_q1_age" attrs="{'invisible': ['|', ('grade_level_type', '!=', 'elementary'), ('c_aisj_elementary_q1', '=', False)]}"/>
+                        <field name="c_aisj_elementary_q1_country_id" attrs="{'invisible': ['|', ('grade_level_type', '!=', 'elementary'), ('c_aisj_elementary_q1', '=', False)]}"/>
+
+                        <field name="c_aisj_elementary_q2" attrs="{'invisible': [('grade_level_type', '!=', 'elementary')]}"/>
+                        <field name="c_aisj_elementary_q2_age" attrs="{'invisible': ['|', ('grade_level_type', '!=', 'elementary'), ('c_aisj_elementary_q2', '=', False)]}"/>
+
+                        <field name="c_aisj_elementary_q3" attrs="{'invisible': [('grade_level_type', '!=', 'elementary')]}"/>
+                        <field name="c_aisj_elementary_q4" attrs="{'invisible': [('grade_level_type', '!=', 'elementary')]}"/>
+                        <field name="c_aisj_elementary_q5" attrs="{'invisible': [('grade_level_type', '!=', 'elementary')]}"/>
+                        <field name="c_aisj_elementary_q6" attrs="{'invisible': [('grade_level_type', '!=', 'elementary')]}"/>
+                        <field name="c_aisj_elementary_q7" attrs="{'invisible': [('grade_level_type', '!=', 'elementary')]}"/>
+                        <field name="c_aisj_elementary_q8" attrs="{'invisible': [('grade_level_type', '!=', 'elementary')]}"/>
+                        <field name="c_aisj_elementary_q9" attrs="{'invisible': [('grade_level_type', '!=', 'elementary')]}"/>
+                        <field name="c_aisj_elementary_q10" attrs="{'invisible': [('grade_level_type', '!=', 'elementary')]}"/>
+                        <field name="c_aisj_elementary_q11" attrs="{'invisible': [('grade_level_type', '!=', 'elementary')]}"/>
+                        <field name="c_aisj_elementary_q12" attrs="{'invisible': [('grade_level_type', '!=', 'elementary')]}"/>
+                        <field name="c_aisj_elementary_q13" attrs="{'invisible': [('grade_level_type', '!=', 'elementary')]}"/>
+                        <field name="c_aisj_elementary_q14" attrs="{'invisible': [('grade_level_type', '!=', 'elementary')]}"/>
+
                     </group>
                 </page>
                 <page name="additional_questions" string="Additional Questsions">
