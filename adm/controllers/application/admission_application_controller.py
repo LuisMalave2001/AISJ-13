@@ -89,7 +89,8 @@ class ApplicationController(AdmissionController):
                     result[key] = False
                     pass
 
-        parent = env.user
+        user_id = http.request.env.user
+        parent = user_id.partner_id
 
         family_id = int(result.pop("family_id", False) or False)
         family = env['res.partner'].browse(family_id)
