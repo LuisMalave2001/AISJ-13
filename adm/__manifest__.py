@@ -77,6 +77,8 @@
              # Wizard
              'wizard/sale_confirm_limit_wizard.xml',
 
+             # Reports
+             'report/adm_application_reports.xml',
              ],
     'qweb': ['static/src/xml/kanban_view_button.xml'],
     'application': True
