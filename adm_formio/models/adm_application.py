@@ -7,7 +7,7 @@ class AdmApplication(models.Model):
     _inherit = "adm.application"
 
     formio_sent_to_email = fields.Char(string="Formio sent to email")
-    formio_reference_form_id = fields.Many2one("formio.form", ondelete="restricted")
+    formio_reference_form_id = fields.Many2one("formio.form", ondelete="RESTRICT")
     form_count = fields.Integer(stirng="Form Count",
         compute="_compute_form_count")
 
