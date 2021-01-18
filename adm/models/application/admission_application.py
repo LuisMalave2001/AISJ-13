@@ -110,6 +110,8 @@ class Application(models.Model):
     father_name = fields.Char("Father name")
     mother_name = fields.Char("Mother name")
 
+    attachment_ids = fields.One2many('ir.attachment', 'res_id', domain=[('res_model', '=', 'adm.application')], string='Attachments')
+
     # Contact
     email = fields.Char(string="Email", related="partner_id.email", index=True)
     phone = fields.Char(string="Phone", related="partner_id.mobile")
