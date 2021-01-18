@@ -2,7 +2,6 @@
 <odoo>
 
     <!-- Actions -->
-    
     <record model="ir.actions.act_window" id="action_language">
         <field name="name">Languages</field>
         <field name="res_model">adm.language</field>
@@ -45,10 +44,17 @@
         <field name="name">Applications</field>
         <field name="res_model">adm.application</field>
         <field name="view_mode">kanban,tree,form</field>
+        <field name="context">{'search_default_group_status_id': True}</field>
     </record>
 
     <record model="ir.actions.act_window" id="action_application_status">
         <field name="name">Application Status</field>
+        <field name="res_model">adm.application.status</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_application_download_file">
+        <field name="name">Application Download</field>
         <field name="res_model">adm.application.status</field>
         <field name="view_mode">tree,form</field>
     </record>

@@ -504,7 +504,15 @@
 
                             <div class="col-12 col-md-6">
                                 <div class="custom-control">
-                                    <label>Is your child toilet trained?</label>
+                                    <label>
+                                        Is your child toilet trained?
+                                        <br/>
+                                        <small>
+                                            Your child should be able to use the toilet independently.
+                                            They must be able to pull pants up and down and handle cleaning
+                                            ( for Pre-K3 applicants).
+                                        </small>
+                                    </label>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio"
                                                data-adm-field="c_aisj_elementary_q2"

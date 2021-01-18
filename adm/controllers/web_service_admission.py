@@ -212,18 +212,17 @@ class AdmisionController(http.Controller):
             attachments = http.request.env['ir.attachment'].sudo()
 
             # filtro del modelo basados en parametros de la url
-            search_domain_attach = [("res_model", "=", "adm.application"),
-                                    ("res_id", "=", application_id.id)]
+            # search_domain_attach =
 
             # Tomar informacion basado en el modelo y en el domain IDS
-            attachments_record = attachments.search(search_domain_attach)
+            # attachments_record = attachments.search(search_domain_attach)
 
             # Obtienes la información basada en los ids anteriores y tomando
             # en cuenta los campos definifos en la funcion posterior
             # mimetype: tpo de archivo, datas: arhivo en binario
-            attachments_values = attachments_record.read(["id", "name"])
+            # attachments_values = attachments_record.read(["id", "name"])
 
-            record["datosFicheros"] = json.dumps(attachments_values)
+            # record["datosFicheros"] = json.dumps(attachments_values)
 
         # pintar la información obtenida, esto lo utilizamos para parsearlo
         # en el ajax.

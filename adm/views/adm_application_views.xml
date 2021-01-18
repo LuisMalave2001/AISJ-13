@@ -108,7 +108,7 @@
                                             <label for="name" class="oe_edit_only"/>
                                             <h1><field name="name" required="1"/></h1>
                                             <label for="login" class="oe_edit_only" string="Email Address"/>
-                                            <h2><field name="login" widget="email" /></h2>
+                                            <h2><field name="login" widget="email"/></h2>
                                             <group>
                                                 <field name="partner_id" readonly="1" required="0"
                                                        groups="base.group_no_one"
@@ -155,6 +155,12 @@
                                             <field name="name"/>
                                             <field name="comment"/>
                                         </tree>
+                                        <form>
+                                            <group>
+                                                <field name="name"/>
+                                                <field name="comment"/>
+                                            </group>
+                                        </form>
                                     </field>
                                 </page>
                                 <page name="allergies" string="Allergies">
@@ -163,6 +169,12 @@
                                             <field name="name"/>
                                             <field name="comment"/>
                                         </tree>
+                                        <form>
+                                            <group>
+                                                <field name="name"/>
+                                                <field name="comment"/>
+                                            </group>
+                                        </form>
                                     </field>
                                 </page>
                                 <page name="medications" string="Medications">
@@ -171,6 +183,12 @@
                                             <field name="name"/>
                                             <field name="comment"/>
                                         </tree>
+                                        <form>
+                                            <group>
+                                                <field name="name"/>
+                                                <field name="comment"/>
+                                            </group>
+                                        </form>
                                     </field>
                                 </page>
                             </notebook>
@@ -187,7 +205,7 @@
                             </field>
                         </page>
                         <page name="relationship_ids" string="Relationships">
-                            <field name="relationship_ids">
+                            <field name="relationship_ids" context="{'default_partner_1': partner_id}">
                                 <tree>
                                     <field name="family_id"/>
                                     <field name="partner_2" string="Partner"/>
@@ -209,4 +227,18 @@
             </form>
         </field>
     </record>
+
+    <record id="adm_application_view_search" model="ir.ui.view">
+        <field name="name">adm.application.view.search</field>
+        <field name="model">adm.application</field>
+        <field name="arch" type="xml">
+            <search>
+                <filter name="group_status_id" string="Status" context="{'group_by':'status_id'}"/>
+                <searchpanel>
+                    <field name="status_id" icon="fa-columns"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
 </odoo>
