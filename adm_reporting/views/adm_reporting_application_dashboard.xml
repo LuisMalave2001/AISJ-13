@@ -20,21 +20,27 @@
 				<view type="graph" ref="adm_reporting.application_graph_view"/>
 				<group>
 					<group>
-						<aggregate name="application" string="Application" group_operator="count" field="id" measure="__count__"/>				
+						<aggregate name="application" string="Application" group_operator="count" field="id" measure="__count__"/>
 						<aggregate name="gpa" string="GPA" field="gpa" group_operator="avg" value_label="Avg GPA"/>
-		
 					</group>
 					<group col="1">
-						<widget name="pie_chart" title="First Language" attrs="{'groupby': 'first_language'}"/>
 						<widget name="pie_chart" title="Citizenship" attrs="{'groupby': 'citizenship'}"/>
-						<widget name="pie_chart" title="Gender" attrs="{'groupby': 'gender'}"/>
 						<widget name="pie_chart" title="Status" attrs="{'groupby': 'status_id'}"/>
+<!--						<widget name="pie_chart" title="Gender" attrs="{'groupby': 'gender'}"/>-->
 					</group>
 				</group>
 				<view type="pivot" ref="adm_reporting.application_pivot_view"/>
 				<!--<view type="cohort" ref="crm_enterprise.crm_lead_view_cohort"/> -->
 			</dashboard>
 		</field>
+	</record>
+
+	<record id="adm_application_view_gantt" model="ir.ui.view">
+	    <field name="name">adm.application.view.gantt</field>
+	    <field name="model">adm.application</field>
+	    <field name="arch" type="xml">
+	        <gantt date_start="create_date" date_stop="finish_datetime"/>
+	    </field>
 	</record>
 
 	<record id="application_pivot_view" model="ir.ui.view">
@@ -51,7 +57,7 @@
 	<record id="adm_application_action_dashboard" model="ir.actions.act_window">	
 		<field name="name">Applications</field>
 		<field name="res_model">adm.application</field>
-		<field name="view_mode">dashboard,pivot,graph,tree,form</field>
+		<field name="view_mode">dashboard,pivot,graph,tree,form,gantt</field>
 	</record>
 
 	<record id="adm_application_action_dashboard_dashboard" model="ir.actions.act_window.view">

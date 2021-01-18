@@ -80,6 +80,9 @@ class Application(models.Model):
     status_history_ids = fields.One2many('adm.application.history.status', 'application_id', string="Status history")
     family_id = fields.Many2one('res.partner', domain="[('is_family', '=', True)]", required=True)
 
+    finish_datetime = fields.Datetime(compute='_compute_finish_date', store=True)
+    finish_timeline = fields.Float(compute='_compute_finish_date', store=True)
+
     responsible_user_id = fields.Many2one('res.users', required=True)
 
     responsible_user_kanban_ids = fields.Many2many(
@@ -98,6 +101,18 @@ class Application(models.Model):
         res = super().default_get(fields)
         a = 0
         return res
+
+    @api.depends('status_id', 'status_id.type_id')
+    def _compute_finish_date(self):
+        for application_id in self:
+            if application_id.status_id.type_id == 'done':
+
+                now = datetime.datetime.now()
+                diff = now - application_id.create_date
+
+                application_id.finish_datetime = now
+                # application_id.finish_timeline = diff
+                application_id.finish_timeline = 0
 
     def _set_gender(self):
         for application_id in self:
