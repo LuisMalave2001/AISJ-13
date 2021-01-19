@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+sincro_data_import_field_access,sincro_data_import_field_access,sincro_data.model_sincro_data_import_field,,1,1,1,1
+sincro_data_configuration_panel_access,sincro_data_configuration_panel_access,sincro_data.model_sincro_data_configuration_panel,,1,1,1,1
+sincro_data_webservice_configurator_access,sincro_data_webservice_configurator_access,sincro_data.model_sincro_data_webservice_configurator,,1,1,1,1

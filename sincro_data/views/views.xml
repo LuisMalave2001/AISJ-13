@@ -1,20 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <record model="ir.ui.view" id="view_import_field_tree">
-        <field name="name">Import Field</field>
-        <field name="model">import_to_facts.import_field</field>
-        <field name="arch" type="xml">
-            <tree>
-                <field name="field_id"/>
-                <field name="alias_field"/>
-            </tree>
-        </field>
-    </record>
-
 
     <record model="ir.ui.view" id="view_configuration_panel_tree">
         <field name="name">configuration_panel</field>
-        <field name="model">import_to_facts.configuration_panel</field>
+        <field name="model">sincro_data.configuration_panel</field>
         <field name="arch" type="xml">
             <tree editable="bottom">
                 <field name="name"/>
@@ -27,6 +16,4 @@
             </tree>
         </field>
     </record>
-
-
 </odoo>
