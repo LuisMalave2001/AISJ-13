@@ -84,16 +84,14 @@
                         </h1>
                     </div>
                     <group>
-                        <field name="preferred_degree_program"/>
-                        <field name="partner_id"/>
-                        <group>
+                        <group name="left_group">
+                            <field name="partner_id" string="Student"/>
                             <field name="first_name"/>
                             <field name="middle_name"/>
                             <field name="last_name"/>
-                            <field name="grade_level"/>
-                            <field name="school_year"/>
                         </group>
-                        <group>
+                        <group name="right_group">
+                            <field name="citizenship"/>
                             <field name="gender"/>
                         </group>
                         <hr colspan="2"/>
@@ -121,13 +119,23 @@
                         </group>
                     </group>
                     <notebook id="application_notebook">
-                        <page string="Tasks">
+                        <page name="tasks" string="Tasks">
                             <field name="state_tasks" attrs="{'invisible': True}"/>
                             <field name="task_ids" widget="many2many_checkboxes" domain="[('id', 'in', state_tasks)]"/>
                         </page>
-
-                        <page name="schools" string="Schools">
-                            <field name="previous_school_ids"/>
+                        <page name="academic" string="Academic">
+                            <group col="2">
+                                <group name="academic_left_group">
+                                    <field name="grade_level"/>
+                                </group>
+                                <group name="academic_right_group">
+                                    <field name="school_year"/>
+                                </group>
+                                <group colspan="2" col="12">
+                                    <label for="previous_school_ids" colspan="12" class="text-center w-100"/>
+                                    <field name="previous_school_ids" nolabel="1" colspan="12"/>
+                                </group>
+                            </group>
                         </page>
                         <page name="family" string="Family">
                             <notebook>
