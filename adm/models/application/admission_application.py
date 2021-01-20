@@ -465,11 +465,29 @@ class Application(models.Model):
 
     @api.model
     def create(self, values):
-        first_status = self.env['adm.application.status'].search([], order="sequence")[0]
-        values['status_id'] = first_status.id
-        values['name'] = formatting.format_name(values['first_name'], values['middle_name'], values['last_name'])
 
-        return super(Application, self).create(values)
+        if not values.get('status_id', False):
+            status_id = self.env['adm.application.status'].search([], order="sequence")[0]
+            values['status_id'] = status_id.id
+        else:
+            status_id = self.env['adm.application.status'].browse(values['status_id'])
+        # values['name'] = formatting.format_name(values['first_name'],
+        # values['middle_name'], values['last_name'])
+        application_id = super(Application, self).create(values)
+
+        message = _("Application created in [%s] status") % status_id.name
+        timestamp = datetime.datetime.now()
+
+        self.env['adm.application.history.status'].sudo().create({
+            'note': message,
+            'timestamp': timestamp,
+            'application_id': application_id.id,
+            })
+
+        if status_id.mail_template_id:
+            application_id.message_post_with_template(template_id=status_id.mail_template_id.id, res_id=application_id.id)
+
+        return application_id
 
     def write(self, values):
 
@@ -479,7 +497,8 @@ class Application(models.Model):
             last_name = values.get('last_name', application_id.last_name)
 
             # "related" in application_id.fields_get()["email"]
-            # Se puede hacer totalmente dinamico, no lo hago ahora por falta de tiempo
+            # Se puede hacer totalmente dinamico, no lo hago ahora por falta de
+            # tiempo
             # Pero sin embargo, es totalmente posible.
             # Los no related directamente no tiene related, y los que si son
             # tiene el campo related de la siguiente manera: (model, field)

@@ -4,7 +4,7 @@ from odoo import models, fields, api, _
 
 
 class ConfiguratorPanel(models.Model):
-    _name = 'import_to_facts.configuration_panel'
+    _name = 'sincro_data.configuration_panel'
 
     sequence = fields.Integer(readonly=True, default=-1)
     name = fields.Char(String="Name")
@@ -19,8 +19,8 @@ class ConfiguratorPanel(models.Model):
     #     # store=True,
     #     relation='import_to_facts_config_panel_import_fields'
     # )
-    parent_id = fields.Many2one("import_to_facts.configuration_panel", string="Parent ID")
-    fields = fields.One2many("import_to_facts.configuration_panel", "parent_id",
+    parent_id = fields.Many2one("sincro_data.configuration_panel", string="Parent ID")
+    fields = fields.One2many("sincro_data.configuration_panel", "parent_id",
                              string="Configuration Panel Childs")
 
     # recur_conf_panel_ids = fields.Many2many(
