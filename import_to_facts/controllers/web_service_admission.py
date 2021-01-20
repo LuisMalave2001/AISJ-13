@@ -1,11 +1,12 @@
 import json
 
-from formiodata.components import selectboxesComponent
+# from formiodata.components import selectboxesComponent
 
 from odoo import http
 import datetime
 import logging
 import re
+from odoo.tools.safe_eval import safe_eval
 
 # Se añaden campos:
 # - Siblings
@@ -72,8 +73,10 @@ class AdmisionController(http.Controller):
                     aux_domain = self.compute_domain(item.domain)
                     aux_val = item_data[item.field_id.sudo().name]
                     # capamos los ids filtrados anteriormente
+                    aux_domain = safe_eval(item.domain or "[]")
                     if len(aux_domain) > 0:
                         aux_domain.append(['id', 'in', aux_val.ids])
+                        # aux_domain
                         aux_val = item_data[item.field_id.sudo().name].search(aux_domain)
 
                     result += self.get_json_from_config_2(item, aux_val)
@@ -290,3 +293,4 @@ class AdmisionController(http.Controller):
             })
 
         return json.dumps(data)
+
