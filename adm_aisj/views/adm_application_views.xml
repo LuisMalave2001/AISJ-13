@@ -5,15 +5,14 @@
         <field name="model">adm.application</field>
         <field name="inherit_id" ref="adm.adm_application_view_form"/>
         <field name="arch" type="xml">
-
-            <field name="previous_school_ids" position="before">
-                <hr/>
-                <group col="1">
-                    <field name="c_aisj_schools_q1"/>
-                    <field name="c_aisj_schools_q2"/>
-                </group>
-                <hr/>
-            </field>
+            <xpath expr="//label[@for='previous_school_ids']" position="before">
+                <hr colspan="12"/>
+                <label for="c_aisj_schools_q1" colspan="8"/>
+                <field name="c_aisj_schools_q1" colspan="4" nolabel="1"/>
+                <label for="c_aisj_schools_q2" colspan="8"/>
+                <field name="c_aisj_schools_q2" colspan="4" nolabel="1"/>
+                <hr colspan="12"/>
+            </xpath>
 
             <notebook id="application_notebook" position="inside">
 
