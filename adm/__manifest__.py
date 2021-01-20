@@ -15,7 +15,7 @@
     # /ir_module_category_data.xml
     # for the full list
     'category': 'Admission',
-    'version': '0.4.1',
+    'version': '0.5.0',
 
     # any module necessary for this one to work correctly
     'depends': ['base', 'school_base', 'mail', 'website', 'contacts'],
