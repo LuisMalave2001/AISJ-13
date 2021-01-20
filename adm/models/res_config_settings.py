@@ -3,23 +3,35 @@
 from odoo import models, fields, api, _
 
 
+class AdmFieldsSettings(models.Model):
+    _name = 'adm.fields.settings'
+    _description = "Fields settings"
+
+    field_id = fields.Many2one('ir.model.fields', "Field")
+    relational_model = fields.Char(related='field_id.relation', store=True)
+
+    name = fields.Char(related='field_id.name')
+
+    parent_id = fields.Many2one('adm.fields.settings', string="Parent")
+    parent_relational_model = fields.Char(related='parent_id.relational_model')
+
+    child_ids = fields.One2many('adm.fields.settings', 'parent_id', string="Childs")
+
+    domain = fields.Char('Domain filter')
+
+
 class ResConfigSettings(models.TransientModel):
     """  Settings for school base module """
     _inherit = "res.config.settings"
 
     adm_application_required_field_ids = fields.Many2many(
-        'ir.model.fields',
-        domain="[('model', '=', 'adm.application')]",
-        string="Application required fields",
-        store=True,
-        relation='adm_app_required_fields')
+        'adm.fields.settings',
+        string="Application required fields")
 
     adm_application_optional_field_ids = fields.Many2many(
-        'ir.model.fields',
-        domain="[('model', '=', 'adm.application')]",
-        string="Application optional fields",
-        store=True,
-        relation='adm_app_optional_fields')
+        'adm.fields.settings',
+        relation='adm_app_optional_field_settings',
+        string="Application optional fields")
 
     @api.model
     def get_values(self):
