@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
 
+    <record id="adm_fields_settings_view_form" model="ir.ui.view">
+        <field name="name">adm.fields.settings.view.form</field>
+        <field name="model">adm.fields.settings</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="field_id" domain="[('model', '=', parent.relational_model)]"/>
+                        <field name="domain"/>
+                        <field name="relational_model" invisible="1"/>
+                    </group>
+                    <field name="child_ids" attrs="{'invisible': [('relational_model', '=', False)]}"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="adm_fields_settings_view_tree" model="ir.ui.view">
+        <field name="name">adm.fields.settings.view.tree</field>
+        <field name="model">adm.fields.settings</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="field_id"/>
+                <field name="domain"/>
+                <field name="child_ids" widget="many2many_tags"/>
+            </tree>
+        </field>
+    </record>
+
     <record id="res_config_settings_view_form" model="ir.ui.view">
         <field name="name">res.config.settings.view.form.inherit.admission</field>
         <field name="model">res.config.settings</field>
@@ -18,14 +48,23 @@
                                     <div class="content-group">
                                         <div class="mt16">
                                             <field name="adm_application_required_field_ids"
-                                                   widget="many2many"
                                                    class="o_light_label"
-                                                   options="{'no_open':True,'no_create':1,'no_create_edit':1}"
-                                                   domain="[('model', '=', 'adm.application'), ('id', 'not in', adm_application_optional_field_ids)]">
-                                                <tree editable="bottom">
-                                                    <field name="field_description"/>
-                                                    <field name="name" groups="base.group_no_one"/>
+                                                   options="{'no_open': 0}"
+                                                   domain="[('id', 'not in', adm_application_optional_field_ids)]">
+                                                <tree>
+                                                    <field name="name"/>
+                                                    <field name="field_id" />
+                                                    <field name="domain"/>
+                                                    <field name="child_ids" widget="many2many_tags"/>
                                                 </tree>
+                                                <form>
+                                                    <group>
+                                                        <field name="field_id" domain="[('model', '=', 'adm.application')]"/>
+                                                        <field name="domain"/>
+                                                        <field name="relational_model" invisible="1"/>
+                                                    </group>
+                                                    <field name="child_ids" attrs="{'invisible': [('relational_model', '=', False)]}"/>
+                                                </form>
                                             </field>
                                         </div>
                                     </div>
@@ -38,12 +77,22 @@
                                         <div class="mt16">
                                             <field name="adm_application_optional_field_ids"
                                                    class="o_light_label"
-                                                   options="{'no_open':True,'no_create':1,'no_create_edit':1}"
-                                                   domain="[('model', '=', 'adm.application'), ('id', 'not in', adm_application_required_field_ids)]">
-                                                <tree editable="bottom">
-                                                    <field name="field_description"/>
-                                                    <field name="name" groups="base.group_no_one"/>
+                                                   options="{'no_open': 0}"
+                                                   domain="[('id', 'not in', adm_application_required_field_ids)]">
+                                                <tree>
+                                                    <field name="name"/>
+                                                    <field name="field_id" />
+                                                    <field name="domain"/>
+                                                    <field name="child_ids" widget="many2many_tags"/>
                                                 </tree>
+                                                <form>
+                                                    <group>
+                                                        <field name="field_id" domain="[('model', '=', 'adm.application')]"/>
+                                                        <field name="domain"/>
+                                                        <field name="relational_model" invisible="1"/>
+                                                    </group>
+                                                    <field name="child_ids" attrs="{'invisible': [('relational_model', '=', False)]}"/>
+                                                </form>
                                             </field>
                                         </div>
                                     </div>
@@ -62,9 +111,7 @@
         <field name="view_id" ref="res_config_settings_view_form"/>
         <field name="view_mode">form</field>
         <field name="target">inline</field>
-        <field name="context">{
-            'module': 'adm'
-            }</field>
+        <field name="context">{'module': 'adm'}</field>
     </record>
 
 </odoo>

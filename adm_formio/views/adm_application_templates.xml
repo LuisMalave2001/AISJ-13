@@ -1,88 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
     <template id="template_application_menu_upload_file_comun"
-              inherit_id="adm.template_application_menu_upload_file_comun">
-        <div id="document_list" position="inside">
+                  inherit_id="adm.template_application_menu_upload_file_comun">
+            <div id="document_list" position="inside">
 
-            <t t-set="head_formio_custom_page">
-                <script defer="defer" type="text/javascript"
-                        src="/adm_formio/static/src/js/adm_upload_file.js"></script>
-            </t>
-            <t t-set="head" t-value="head_formio_custom_page + (head or '')"/>
+                <t t-set="head_formio_custom_page">
+                    <script defer="defer" type="text/javascript"
+                            src="/adm_formio/static/src/js/adm_upload_file.js"></script>
+                </t>
+                <t t-set="head" t-value="head_formio_custom_page + (head or '')"/>
 
-            <div class="col-12 col-md-6 form-group" id="sent_formio_email">
-                <label for="immunization_history" class="label">
-                    Reference Form<span class="text-danger"> *</span>
-                    <p>
-                        <small>
-                            Please enter the email address of the teacher that will fill 
-                            the Reference form. The teacher will receive a link to the form 
-                            that will be delivered by the school. 
-                        </small>
-                    </p>
-                </label>
-                <div class="row">
-                    <div class="col-8">
-                        <input type="mail" class="form-control" placeholder="" t-att-value="application_id.formio_sent_to_email"/>
-                    </div>
-                    <div class="col">
-                        <button class="btn btn-outline-info" type="button">
-                            <div class="js_hide_if_sent">
-                                Sent
-                            </div>
-                            <div class="js_show_if_sent" style="display: none;">
-                                <span class="spinner-border spinner-border-sm" role="status"></span>
-                                Loading...
-                            </div>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="modal" tabindex="-1" id="errorDialog" role="dialog">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Error!</h5>
+                <div class="col-12 col-md-6 form-group" id="sent_formio_email">
+                    <label for="immunization_history" class="label">
+                        Reference Form<span t-if="application_id.grade_level.user_type_id.type != 'elementary'"
+                                            class="text-danger"> *</span>
+                        <p>
+                            <small>
+                                Please enter the email address of the teacher that will fill
+                                the Reference form. The teacher will receive a link to the form
+                                that will be delivered by the school.
+                            </small>
+                        </p>
+                    </label>
+                    <div class="row">
+                        <div class="col-8">
+                            <input type="mail" class="form-control" placeholder=""
+                                   t-att-value="application_id.formio_sent_to_email"/>
                         </div>
-                        <div class="modal-body">
-                            <p class="js_error_text text-danger"></p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <div class="col">
+                            <button class="btn btn-outline-info" type="button">
+                                <div class="js_hide_if_sent">
+                                    Sent
+                                </div>
+                                <div class="js_show_if_sent" style="display: none;">
+                                    <span class="spinner-border spinner-border-sm" role="status"></span>
+                                    Loading...
+                                </div>
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
 
-        </div>
-        <!--        <xpath expr="//input[@value='comun_bank_comercial_reference']/../../.." position="after">-->
-        <!--            <hr/>-->
-        <!--            <div class="d-flex align-items-end">-->
-        <!--                <form t-att-action="'/admission/applications/message/{}'.format(application_id)" method="post" enctype="multipart/form-data">-->
-        <!--                    <section class="d-flex col-12 mt-3 p-0">-->
-        <!--                        <div class="col-12 text-left p-0">-->
-        <!--                            <label for="teacher_assessment_email">-->
-        <!--                                <b>11. Teacher assessments (based on language of previous school)</b>-->
-        <!--                            </label>-->
-        <!--                            <div>-->
-        <!--                                <t t-if="application_id.teacher_assessment_form_id.sudo().state == 'COMPLETE'">-->
-        <!--                                    <span class="badge badge-success">&#10004;</span>-->
-        <!--                                </t>-->
-        <!--                                <t t-else="">-->
-        <!--                                    <span t-if="application_id.teacher_assessment_form_id" class="badge badge-warning mr-2">&#10006;</span>-->
-        <!--                                    <span t-else="" class="badge badge-danger mr-2">&#10006;</span>-->
-        <!--                                </t>-->
-        <!--                                <input type="email" t-att-disabled="application_id.teacher_assessment_form_id" name="teacher_assessment_email" t-att-value="application.teacher_assessment_email" required="true"/>-->
-        <!--                                <input class="form-control d-none" name="origin" id="origin" value="comun"/>-->
-        <!--                                <button t-if="not application_id.teacher_assessment_form_id" class="btn btn-warning ml-2">Submit</button>-->
-        <!--                            </div>-->
-        <!--                        </div>-->
-        <!--                    </section>-->
-        <!--                </form>-->
-        <!--            </div>-->
-        <!--        </xpath>-->
-    </template>
+
+                <div class="modal" tabindex="-1" id="errorDialog" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Error!</h5>
+                            </div>
+                            <div class="modal-body">
+                                <p class="js_error_text text-danger"></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!--        <xpath expr="//input[@value='comun_bank_comercial_reference']/../../.." position="after">-->
+            <!--            <hr/>-->
+            <!--            <div class="d-flex align-items-end">-->
+            <!--                <form t-att-action="'/admission/applications/message/{}'.format(application_id)" method="post" enctype="multipart/form-data">-->
+            <!--                    <section class="d-flex col-12 mt-3 p-0">-->
+            <!--                        <div class="col-12 text-left p-0">-->
+            <!--                            <label for="teacher_assessment_email">-->
+            <!--                                <b>11. Teacher assessments (based on language of previous school)</b>-->
+            <!--                            </label>-->
+            <!--                            <div>-->
+            <!--                                <t t-if="application_id.teacher_assessment_form_id.sudo().state == 'COMPLETE'">-->
+            <!--                                    <span class="badge badge-success">&#10004;</span>-->
+            <!--                                </t>-->
+            <!--                                <t t-else="">-->
+            <!--                                    <span t-if="application_id.teacher_assessment_form_id" class="badge badge-warning mr-2">&#10006;</span>-->
+            <!--                                    <span t-else="" class="badge badge-danger mr-2">&#10006;</span>-->
+            <!--                                </t>-->
+            <!--                                <input type="email" t-att-disabled="application_id.teacher_assessment_form_id" name="teacher_assessment_email" t-att-value="application.teacher_assessment_email" required="true"/>-->
+            <!--                                <input class="form-control d-none" name="origin" id="origin" value="comun"/>-->
+            <!--                                <button t-if="not application_id.teacher_assessment_form_id" class="btn btn-warning ml-2">Submit</button>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                    </section>-->
+            <!--                </form>-->
+            <!--            </div>-->
+            <!--        </xpath>-->
+        </template>
 </odoo>

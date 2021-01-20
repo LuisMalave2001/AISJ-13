@@ -22,3 +22,6 @@ adm_medical_medication_access,adm.adm_medical_medication_access,adm.model_adm_me
 adm_gender_access,adm.adm_gender_access,adm.model_adm_gender,,1,0,0,0
 adm_inquiry_status_type_access,adm.adm_inquiry_status_type_access,adm.model_adm_inquiry_status_type,,1,0,0,0
 adm_application_history_status,adm.adm_application_history_status,adm.model_adm_application_history_status,,1,1,1,1
+access_adm_fields_settings_all,access_adm_fields_settings_all,model_adm_fields_settings,,1,0,0,0
+access_adm_fields_settings_settings,access_adm_fields_settings_settings,model_adm_fields_settings,adm.admission_group_settings,1,1,1,1
+access_adm_fields_settings_admin,access_adm_fields_settings_admin,model_adm_fields_settings,adm.admission_group_manager,1,1,1,1

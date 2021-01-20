@@ -4,6 +4,7 @@ from odoo import models, fields, api, exceptions, _
 from odoo.addons.adm.utils import formatting
 import base64
 import datetime
+from odoo.tools.safe_eval import safe_eval
 
 status_types = [("stage", "Stage"), ("done", "Done"), ("return", "Return To Parents"), ("started", "Application Started"), ("submitted", "Submitted"), ("cancelled", "Cancelled")]
 
@@ -301,9 +302,18 @@ class Application(models.Model):
             application_required_fields = [int(e) for e in application_required_fields_str.split(',') if e.isdigit()]
 
             if application_required_fields:
-                required_field_ids = self.env['ir.model.fields'].sudo().browse(application_required_fields)
-                application_id.required_fields_completed = sum(required_field_ids.mapped(lambda f: not not application_id[f.name]))
-                application_id.total_required_fields_completed = application_id.required_fields_completed * 100 / len(required_field_ids)
+                required_field_ids = self.env['adm.fields.settings'].sudo().browse(application_required_fields)
+                filtered_required_fields_ids = self.env['adm.fields.settings'].sudo()
+                for required_field_id in required_field_ids:
+                    field_domain = safe_eval(required_field_id.domain or '[]')
+                    if application_id.filtered_domain(field_domain):
+                        filtered_required_fields_ids += required_field_id
+
+                application_id.required_fields_completed = sum(filtered_required_fields_ids.mapped(lambda f: not not application_id[f.name]))
+                if filtered_required_fields_ids:
+                    application_id.total_required_fields_completed = application_id.required_fields_completed * 100 / len(filtered_required_fields_ids)
+                else:
+                    application_id.total_required_fields_completed = 0
             else:
                 application_id.required_fields_completed = 0
                 application_id.total_required_fields_completed = 0
@@ -312,16 +322,27 @@ class Application(models.Model):
             application_optional_fields = [int(e) for e in application_optional_fields_str.split(',') if e.isdigit()]
 
             if application_optional_fields:
-                optional_field_ids = self.env['ir.model.fields'].sudo().browse(application_optional_fields)
-                application_id.optional_fields_completed = sum(optional_field_ids.mapped(lambda f: not not application_id[f.name]))
-                application_id.total_optional_fields_completed = application_id.optional_fields_completed * 100 / len(optional_field_ids)
+                optional_field_ids = self.env['adm.fields.settings'].sudo().browse(application_optional_fields)
+                filtered_optional_field_ids = self.env['adm.fields.settings'].sudo()
+                for required_field_id in optional_field_ids:
+                    field_domain = safe_eval(required_field_id.domain or '[]')
+                    if application_id.filtered_domain(field_domain):
+                        filtered_optional_field_ids += optional_field_ids
+                application_id.optional_fields_completed = sum(filtered_optional_field_ids.mapped(lambda f: not not application_id[f.name]))
+                if filtered_optional_field_ids:
+                    application_id.total_optional_fields_completed = application_id.optional_fields_completed * 100 / len(filtered_optional_field_ids)
+                else:
+                    application_id.total_optional_fields_completed = 0
             else:
                 application_id.optional_fields_completed = 0
                 application_id.total_optional_fields_completed = 0
 
             # Required fields first
             application_id.fields_completed = application_id.required_fields_completed + application_id.optional_fields_completed
-            application_id.total_fields_completed = (application_id.fields_completed * 100) / (len(application_optional_fields) + len(application_required_fields))
+            if application_optional_fields and application_required_fields:
+                application_id.total_fields_completed = (application_id.fields_completed * 100) / (len(application_optional_fields) + len(application_required_fields))
+            else:
+                application_id.total_fields_completed = 0
 
     def message_get_suggested_recipients(self):
         recipients = super().message_get_suggested_recipients()
