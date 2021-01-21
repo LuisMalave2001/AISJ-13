@@ -240,6 +240,7 @@ class Application(models.Model):
     doctor_phone = fields.Char("Doctor phone")
     doctor_address = fields.Char("Doctor Direction")
     hospital = fields.Char("Hospital")
+    hospital_address = fields.Char("Hospital Address")
     permission_to_treat = fields.Boolean("Permission To Treat")
     blood_type = fields.Char("Blood Type")
     medical_allergies_ids = fields.One2many(string="Allergies", related="partner_id.medical_allergies_ids", readonly=False)
