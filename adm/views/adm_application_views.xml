@@ -29,7 +29,9 @@
                                                    nolabel="1"
                                                    string="Perc."
                                                    widget="percentpie"/>
+                                            <br/>
                                         </strong>
+                                        <span><strong>Grade level:</strong> <field name="grade_level"/></span>
                                         <br/>
                                     </div>
                                     <div class="o_dropdown_kanban dropdown">
