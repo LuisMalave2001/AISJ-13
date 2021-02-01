@@ -8,3 +8,5 @@ class FormioForm(models.Model):
     reference = fields.Reference(selection_add=[
         ("adm.inquiry","Inquiry"),
         ("adm.application","Application")])
+
+    admission_to_email = fields.Char("Email to")
