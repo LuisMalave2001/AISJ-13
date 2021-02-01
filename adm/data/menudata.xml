@@ -44,7 +44,7 @@
         <field name="name">Applications</field>
         <field name="res_model">adm.application</field>
         <field name="view_mode">kanban,tree,form</field>
-        <field name="context">{'search_default_group_status_id': True}</field>
+        <field name="context">{'search_default_group_status_id': True, 'search_default_current_school_year': True}</field>
     </record>
 
     <record model="ir.actions.act_window" id="action_application_status">

@@ -40,9 +40,23 @@
                 <div class="app_settings_block" data-string="Admission Data-String" string="Admission"
                      data-key="adm">
                     <div id="adm_setting">
+                        <h2>Admission</h2>
+                        <div class="row mt16 o_settings_container" id="admission_settings_container">
+                            <div class="col-12 col-md-6 o_settings_container">
+                                <div class="o_setting_right_pane">
+                                    <label for="adm_current_school_year"/>
+                                    <div class="content-group">
+                                        <div class="mt16">
+                                            <field name="adm_current_school_year"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <h2>Application</h2>
                         <div class="row mt16 o_settings_container" id="adm_settins_container">
-                            <div class="col-12 col-6 o_setting_box">
+                            <div class="col-12 o_setting_box">
                                 <div class="o_setting_right_pane">
                                     <label for="adm_application_required_field_ids"/>
                                     <div class="content-group">
@@ -50,6 +64,7 @@
                                             <field name="adm_application_required_field_ids"
                                                    class="o_light_label"
                                                    options="{'no_open': 0}"
+                                                   style="width: 100%"
                                                    domain="[('id', 'not in', adm_application_optional_field_ids)]">
                                                 <tree>
                                                     <field name="name"/>
@@ -70,7 +85,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-6 o_setting_box">
+                            <div class="col-12 o_setting_box">
                                 <div class="o_setting_right_pane">
                                     <label for="adm_application_optional_field_ids"/>
                                     <div class="content-group">
@@ -78,6 +93,7 @@
                                             <field name="adm_application_optional_field_ids"
                                                    class="o_light_label"
                                                    options="{'no_open': 0}"
+                                                   style="width: 100%"
                                                    domain="[('id', 'not in', adm_application_required_field_ids)]">
                                                 <tree>
                                                     <field name="name"/>

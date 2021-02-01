@@ -65,7 +65,6 @@
         <field name="name">adm.application.view.form</field>
         <field name="model">adm.application</field>
         <field name="arch" type="xml">
-
             <form>
                 <header>
                     <field name="status_type" attrs="{'invisible': 1}"/>
@@ -251,7 +250,10 @@
         <field name="model">adm.application</field>
         <field name="arch" type="xml">
             <search>
+
                 <filter name="group_status_id" string="Status" context="{'group_by':'status_id'}"/>
+                <filter name="current_school_year" string="Current School Year" domain="[('is_current_school_year', '=', True)]"/>
+
                 <searchpanel>
                     <field name="status_id" icon="fa-columns"/>
                 </searchpanel>
