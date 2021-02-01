@@ -258,4 +258,16 @@
         </field>
     </record>
 
+    <act_window name="Send email"
+                res_model="mail.compose.message"
+                binding_model="adm.application"
+                binding_views="list"
+                view_mode="form"
+                target="new"
+                id="action_application_mass_mail"
+                context="{
+                    'default_composition_mode': 'mass_mail',
+                    'default_partner_to': '${object.id or \'\'}',
+                }"/>
+
 </odoo>
