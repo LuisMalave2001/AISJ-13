@@ -10,6 +10,7 @@
                 <field name="total_optional_fields_completed"/>
                 <field name="partner_id"/>
                 <field name="image"/>
+                <field name="last_time_submitted"/>
                 <field name="id"/>
                 <templates>
                     <t t-name="kanban-box">
@@ -31,7 +32,13 @@
                                                    widget="percentpie"/>
                                             <br/>
                                         </strong>
+
                                         <span><strong>Grade level:</strong> <field name="grade_level"/></span>
+
+                                        <br/>
+                                        <br/>
+
+                                        <span><strong>Submitted at:</strong> <field name="last_time_submitted"/></span>
                                         <br/>
                                     </div>
                                     <div class="o_dropdown_kanban dropdown">
