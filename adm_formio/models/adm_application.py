@@ -8,6 +8,8 @@ class AdmApplication(models.Model):
 
     formio_sent_to_email = fields.Char(string="Formio sent to email")
     formio_reference_form_id = fields.Many2one("formio.form", ondelete="RESTRICT")
+    formio_reference_form_state = fields.Selection(related='formio_reference_form_id.state')
+
     form_count = fields.Integer(stirng="Form Count",
         compute="_compute_form_count")
 

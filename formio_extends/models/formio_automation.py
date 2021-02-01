@@ -74,3 +74,4 @@ class FormioAutomation(models.Model):
                 })
             if form_automation.mail_template_id:
                 form_automation.mail_template_id.sudo().send_mail(rec.id)
+            return form

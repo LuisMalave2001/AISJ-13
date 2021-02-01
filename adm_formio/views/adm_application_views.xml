@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="adm_application_view_form_inherit" model="ir.ui.view">
-        <field name="name">adm.application.view.form.inherit</field>
+        <field name="name">adm.application.view.form.inherit.formio</field>
         <field name="model">adm.application</field>
         <field name="inherit_id" ref="adm.adm_application_view_form"/>
         <field name="arch" type="xml">
@@ -15,8 +15,10 @@
             </xpath>
             <notebook position="inside">
                 <page name="formio" string="Formio">
-                    <group>
+                    <group col="6">
                         <field name="formio_reference_form_id"/>
+                        <field name="formio_reference_form_state" string="Formio Reference State"/>
+                        <field name="formio_sent_to_email"/>
                     </group>
                 </page>
             </notebook>
