@@ -79,6 +79,7 @@ class Application(models.Model):
     birth_city = fields.Char("Birth City", related="partner_id.city")
     gender = fields.Many2one("adm.gender", string="Gender", related="partner_id.gender", inverse="_set_gender")
     status_history_ids = fields.One2many('adm.application.history.status', 'application_id', string="Status history")
+    last_time_submitted = fields.Datetime(compute='_compute_last_time_submitted', store=True)
     family_id = fields.Many2one('res.partner', domain="[('is_family', '=', True)]", required=True)
 
     finish_datetime = fields.Datetime(compute='_compute_finish_date', store=True)
@@ -102,6 +103,12 @@ class Application(models.Model):
         res = super().default_get(fields)
         a = 0
         return res
+
+    @api.depends('status_history_ids')
+    def _compute_last_time_submitted(self):
+        for application_id in self:
+            submitted_status = application_id.status_history_ids.filtered(lambda sh: sh.status_id.type_id == 'submitted')[:1]
+            application_id.last_time_submitted = submitted_status.timestamp
 
     @api.depends('status_id', 'status_id.type_id')
     def _compute_finish_date(self):
@@ -504,6 +511,7 @@ class Application(models.Model):
             'note': message,
             'timestamp': timestamp,
             'application_id': application_id.id,
+            'status_id': status_id.id,
             })
 
         if status_id.mail_template_id:
@@ -554,6 +562,7 @@ class Application(models.Model):
                     'note': message,
                     'timestamp': timestamp,
                     'application_id': application_id.id,
+                    'status_id': next_status_id.id,
                     })
 
                 if next_status_id.mail_template_id:

@@ -10,6 +10,7 @@
                 <field name="total_optional_fields_completed"/>
                 <field name="partner_id"/>
                 <field name="image"/>
+                <field name="last_time_submitted"/>
                 <field name="id"/>
                 <templates>
                     <t t-name="kanban-box">
@@ -31,7 +32,13 @@
                                                    widget="percentpie"/>
                                             <br/>
                                         </strong>
+
                                         <span><strong>Grade level:</strong> <field name="grade_level"/></span>
+
+                                        <br/>
+                                        <br/>
+
+                                        <span><strong>Submitted at:</strong> <field name="last_time_submitted"/></span>
                                         <br/>
                                     </div>
                                     <div class="o_dropdown_kanban dropdown">
@@ -251,5 +258,17 @@
             </search>
         </field>
     </record>
+
+    <act_window name="Send email"
+                res_model="mail.compose.message"
+                binding_model="adm.application"
+                binding_views="list"
+                view_mode="form"
+                target="new"
+                id="action_application_mass_mail"
+                context="{
+                    'default_composition_mode': 'mass_mail',
+                    'default_partner_to': '${object.id or \'\'}',
+                }"/>
 
 </odoo>
