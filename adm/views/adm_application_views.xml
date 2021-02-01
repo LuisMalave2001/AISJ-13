@@ -164,6 +164,7 @@
                                 <field name="hospital"/>
                                 <field name="doctor_address"/>
                                 <field name="blood_type"/>
+                                <field name="permission_to_treat"/>
                             </group>
                             <notebook id="application_health">
                                 <page name="conditions" string="Conditions">
