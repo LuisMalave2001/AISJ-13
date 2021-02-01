@@ -24,4 +24,16 @@
             </notebook>
         </field>
     </record>
+
+    <record id="view_formio_form_tree" model="ir.ui.view">
+        <field name="name">formio.form.view.tree.inherit.admission</field>
+        <field name="model">formio.form</field>
+        <field name="inherit_id" ref="formio.view_formio_form_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='builder_id']" position="after">
+                <field name="admission_to_email"/>
+            </xpath>
+        </field>
+    </record>
+
 </odoo>

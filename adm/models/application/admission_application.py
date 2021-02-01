@@ -92,6 +92,8 @@ class Application(models.Model):
         compute="compute_responsible_user_kanban",
         string="Responsible User")
 
+    is_current_school_year = fields.Boolean(string="Current school year", compute='_compute_current_school_year', search='_search_current_school_year')
+
     def compute_responsible_user_kanban(self):
         for application_id in self:
             application_id.responsible_user_kanban_ids = application_id.responsible_user_id
@@ -103,6 +105,26 @@ class Application(models.Model):
         res = super().default_get(fields)
         a = 0
         return res
+
+    def _search_current_school_year(self, operator, value):
+        current_school_year_id = int(self.env['ir.config_parameter'].sudo().get_param('adm.adm_current_school_year', False))
+        current_school_year = self.env['school_base.school_year'].browse(current_school_year_id)
+
+        if value:
+            operator = '='
+        else:
+            operator = '!='
+
+        return [('school_year', operator, current_school_year.id)]
+
+    def _compute_current_school_year(self):
+        for application_id in self:
+            current_school_year_id = int(self.env['ir.config_parameter'].sudo().get_param('adm.adm_current_school_year', False))
+            current_school_year = self.env['school_base.school_year'].browse(current_school_year_id)
+            application_id.is_current_school_year = (application_id.school_year
+                                                     or current_school_year
+                                                     or application_id.school_year == current_school_year)
+
 
     @api.depends('status_history_ids')
     def _compute_last_time_submitted(self):

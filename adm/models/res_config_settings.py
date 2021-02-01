@@ -24,6 +24,10 @@ class ResConfigSettings(models.TransientModel):
     """  Settings for school base module """
     _inherit = "res.config.settings"
 
+    adm_current_school_year = fields.Many2one('school_base.school_year',
+                                              config_parameter='adm.adm_current_school_year',
+                                              string="Current school year")
+
     adm_application_required_field_ids = fields.Many2many(
         'adm.fields.settings',
         string="Application required fields")
